@@ -1,0 +1,7 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<BusinessInfoDesign class="oracle.dbtools.crest.model.businessinfo.BusinessInfoDesign" name="Business Information" id="7E631057-FB9B-AF7A-A832-271B271DD5C5">
+<createdBy>toni</createdBy>
+<createdTime>2021-08-09 06:55:05 UTC</createdTime>
+<ownerDesignName>schema_dfg_gepris</ownerDesignName>
+<shouldBeOpen>false</shouldBeOpen>
+</BusinessInfoDesign>

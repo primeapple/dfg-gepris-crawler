@@ -1,0 +1,7 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<LogicalDesign class="oracle.dbtools.crest.model.design.logical.LogicalDesign" name="Logical" id="A6E7525D-1093-3E96-8D72-4C522AF91D90" mainViewID="82118EBA-0B02-A2C4-38C0-A60DF3E02336">
+<createdBy>toni</createdBy>
+<createdTime>2021-08-09 06:55:05 UTC</createdTime>
+<ownerDesignName>schema_dfg_gepris</ownerDesignName>
+<shouldBeOpen>false</shouldBeOpen>
+</LogicalDesign>

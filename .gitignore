@@ -1,0 +1,20 @@
+# development specific
+venv
+.idea
+
+# mac os stuff
+.DS_Store
+
+# scrapy http cache
+.scrapy
+
+# generated
+.proxylist.txt
+test.json
+
+# python specific
+__pycache__/
+
+# private stuff
+notes
+.env

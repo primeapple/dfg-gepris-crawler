@@ -1,0 +1,5 @@
+psycopg2
+pytz
+scrapy
+scrapy-fake-useragent
+scrapy-rotating-proxies

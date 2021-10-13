@@ -1,0 +1,7 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<ProcessModel class="oracle.dbtools.crest.model.design.process.ProcessModel" name="Process Model" id="5DE46F9D-175F-D896-7454-DF72654E37F5">
+<createdBy>toni</createdBy>
+<createdTime>2021-08-09 06:55:05 UTC</createdTime>
+<ownerDesignName>schema_dfg_gepris</ownerDesignName>
+<shouldBeOpen>false</shouldBeOpen>
+</ProcessModel>
