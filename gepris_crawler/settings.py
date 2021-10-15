@@ -32,6 +32,7 @@ FAKEUSERAGENT_PROVIDERS = [
     'scrapy_fake_useragent.providers.FixedUserAgentProvider',  # fall back to USER_AGENT value
 ]
 USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:90.0) Gecko/20100101 Firefox/90.0'
+# USER_AGENT = 'gepris_crawler by Toni Mueller (toni.mueller@student.uni-halle.de)'
 
 DOWNLOADER_MIDDLEWARES = {
     'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
@@ -40,6 +41,7 @@ DOWNLOADER_MIDDLEWARES = {
     'scrapy_fake_useragent.middleware.RetryUserAgentMiddleware': 401,
 }
 
+# Parameters for Proxy middleware
 if os.environ.get('WEBSHARE_PROXY_LIST_URL') is not None:
     ROTATING_PROXY_LIST_PATH = '.proxylist.txt'
     PROXY_MIDDLEWARES = {
@@ -48,8 +50,13 @@ if os.environ.get('WEBSHARE_PROXY_LIST_URL') is not None:
     }
     DOWNLOADER_MIDDLEWARES.update(PROXY_MIDDLEWARES)
 
-
-# USER_AGENT = 'gepris_crawler by Toni Mueller (toni.mueller@student.uni-halle.de)'
+# Parameters for email notifications
+MAIL_RECEIVER = os.environ.get('NOTIFICATION_EMAIL_RECEIVER')
+MAIL_FROM = os.environ.get('NOTIFICATION_EMAIL_SENDER')
+MAIL_USER = os.environ.get('NOTIFICATION_EMAIL_USERNAME')
+MAIL_PASS = os.environ.get('NOTIFICATION_EMAIL_PASSWORD')
+MAIL_HOST = os.environ.get('NOTIFICATION_EMAIL_SMTP_SERVER')
+MAIL_PORT = os.environ.get('NOTIFICATION_EMAIL_SMTP_PORT')
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = True
@@ -99,7 +106,8 @@ SPIDER_MIDDLEWARES = {
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-   'gepris_crawler.pipelines.DatabaseInsertionPipeline': 300,
+    'gepris_crawler.pipelines.DatabaseInsertionPipeline': 299,
+    'gepris_crawler.pipelines.EmailNotifierPipeline': 300,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)

@@ -5,9 +5,11 @@
 
 
 # useful for handling different item types with a single interface
+import pprint
+
+from scrapy.mail import MailSender
 from itemadapter import ItemAdapter
 from scrapy.exceptions import NotConfigured
-
 
 class DatabaseInsertionPipeline:
     """
@@ -46,3 +48,37 @@ class DatabaseInsertionPipeline:
             spider.db.insert_data_monitor_run(item)
         self.scraped_items += 1
         return item
+
+
+class EmailNotifierPipeline:
+
+    def __init__(self, settings):
+        self.mailer = MailSender.from_settings(settings)
+        self.receiver = settings.get('MAIL_RECEIVER')
+
+    @classmethod
+    def from_crawler(cls, crawler):
+        settings = crawler.settings
+        if crawler.spider.name == 'data_monitor' \
+                or settings.get('MAIL_RECEIVER') is None \
+                or settings.get('MAIL_FROM') is None \
+                or settings.get('MAIL_USER') is None \
+                or settings.get('MAIL_PASS') is None \
+                or settings.get('MAIL_HOST') is None \
+                or settings.get('MAIL_PORT') is None:
+            raise NotConfigured
+        else:
+            return cls(settings)
+
+    def close_spider(self, spider):
+        scraped_items = spider.crawler.stats.get_value('item_scraped_count')
+        if scraped_items is None:
+            scraped_items = 0
+        if spider.name == 'details':
+            expected_items = f" ({len(spider.ids)})"
+        else:
+            expected_items = ''
+        subject = f"GeprisCrawler - Spider '{spider.name}' - '{spider.context}' finished, " \
+                  f"{scraped_items}{expected_items} items"
+        message = f"Summary stats from Scrapy spider: \n\n{pprint.pformat(spider.crawler.stats.get_stats())}"
+        self.mailer.send(to=[self.receiver], subject=subject, body=message)

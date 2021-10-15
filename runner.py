@@ -6,7 +6,7 @@ import shlex
 try:
     # sourcing the environment variables from the 'outside_docker.sh' file
     command = shlex.split("env -i bash -c 'source outside_docker.sh && env'")
-    proc = subprocess.run(command, capture_output=True, cwd='..', text=True)
+    proc = subprocess.run(command, capture_output=True, text=True)
     for line in proc.stdout.split('\n'):
         if line == '':
             break
