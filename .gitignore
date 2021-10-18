@@ -9,11 +9,12 @@ venv
 .scrapy
 
 # generated
-.proxylist.txt
 test.json
 
 # python specific
 __pycache__/
+project.egg-info/
+build/
 
 # private stuff
 notes

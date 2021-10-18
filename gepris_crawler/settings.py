@@ -7,6 +7,7 @@
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 import os
+from gepris_crawler.proxylist import get_formatted_proxy_list
 
 BOT_NAME = 'gepris_crawler'
 
@@ -43,7 +44,7 @@ DOWNLOADER_MIDDLEWARES = {
 
 # Parameters for Proxy middleware
 if os.environ.get('WEBSHARE_PROXY_LIST_URL') is not None:
-    ROTATING_PROXY_LIST_PATH = '.proxylist.txt'
+    ROTATING_PROXY_LIST = get_formatted_proxy_list(os.environ.get('WEBSHARE_PROXY_LIST_URL'))
     PROXY_MIDDLEWARES = {
         'rotating_proxies.middlewares.RotatingProxyMiddleware': 610,
         'rotating_proxies.middlewares.BanDetectionMiddleware': 620,
@@ -125,7 +126,7 @@ AUTOTHROTTLE_TARGET_CONCURRENCY = 1.0
 
 # Enable and configure HTTP caching (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html#httpcache-middleware-settings
-HTTPCACHE_ENABLED = True
+HTTPCACHE_ENABLED = False
 #HTTPCACHE_EXPIRATION_SECS = 0
 #HTTPCACHE_DIR = 'httpcache'
 HTTPCACHE_IGNORE_HTTP_CODES = [500, 503, 504, 400, 403, 404, 408, 301, 302]

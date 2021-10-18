@@ -86,8 +86,8 @@ def to_list(value):
     return [value]
 
 
-def to_datetime(value, format, only_date=False):
-    dt = CEST.localize(datetime.strptime(value, format))
+def to_datetime(value, dateformat, only_date=False):
+    dt = CEST.localize(datetime.strptime(value, dateformat))
     return dt.date() if only_date else dt
 
 

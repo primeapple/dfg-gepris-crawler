@@ -9,7 +9,7 @@ services:
       - POSTGRES_DB=$POSTGRES_DB
       - TZ=Europe/Berlin
       - PGTZ=Europe/Berlin
-    command: ["-c", "shared_buffers=256MB", "-c", "max_connections=200"]
+    command: ["-c", "shared_buffers=1024MB"]
     volumes:
       # recreating container and starting reinits the db with files in this dir
       - ./database/init:/docker-entrypoint-initdb.d
@@ -17,11 +17,27 @@ services:
       - ./volumes/db-data:/var/lib/postgresql/data
     ports:
       - $POSTGRES_PORT_EXT:5432
+    restart: unless-stopped
 
   adminer:
     image: adminer
-    restart: always
     ports:
       - $ADMINER_PORT_EXT:8080
     depends_on:
       - db
+    restart: unless-stopped
+
+  scrapyd:
+    build:
+      context: .
+      dockerfile: scrapyd.Dockerfile
+    ports:
+      - 6800:6800
+    env_file:
+      - .env
+    environment:
+      - TZ=Europe/Berlin
+    volumes:
+      - ./volumes/scrapyd:/var/lib/scrapyd
+      - /usr/local/lib/python3.9/dist-packages
+    restart: unless-stopped
