@@ -36,10 +36,10 @@ def generate_request(file_path):
         return Request(url=gepris_helper.data_monitor_url())
     elif spider_name == 'search_results':
         file_name_without_type = file_name.split('.')[0]
-        context, index, items_per_page = file_name_without_type.split('_')
+        context, index, items_per_page, date = file_name_without_type.split('_')
         return gepris_helper.search_results_request(context, items_per_page, index, items_per_page)
     elif spider_name == 'details':
         file_name_without_type = file_name.split('.')[0]
-        context, element_id, language = file_name_without_type.split('_')
+        context, element_id, language, date = file_name_without_type.split('_')
         url = gepris_helper.details_url(element_id, context)
         return gepris_helper.details_request(url, language)

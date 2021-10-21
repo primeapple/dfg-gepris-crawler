@@ -13,8 +13,8 @@ class DataMonitorSpiderTest(unittest.TestCase):
     def setUp(self):
         self.spider = DataMonitorSpider(settings=s.get_settings(database=False))
 
-    def test(self):
-        result = self.spider.parse(r.fake_response_from_file('data_monitor/21102022.html'))
+    def test_data_monitor(self):
+        result = self.spider.parse(r.fake_response_from_file('data_monitor/21102021.html'))
         self.assertIsInstance(result, scrapy.Item)
         expected = {
             'last_update': datetime(2021, 10, 19).date(),
