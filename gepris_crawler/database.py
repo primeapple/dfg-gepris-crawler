@@ -26,6 +26,15 @@ class PostgresDatabase:
         self.connection.close()
         self.connection = None
 
+    def execute_sql(self, sql, params=None):
+        with self.connection.cursor() as cursor:
+            if params is None:
+                cursor.execute(sql)
+            else:
+                cursor.execute(sql, params)
+        self.connection.commit()
+
+
     def get_ids(self, context, only_needed=False, limit=0):
         sql_params = (context,)
         sql = "SELECT a.id FROM available_items a"

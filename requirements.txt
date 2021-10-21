@@ -3,3 +3,4 @@ pytz
 scrapy
 scrapy-fake-useragent
 scrapy-rotating-proxies
+pypika
