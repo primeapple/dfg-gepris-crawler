@@ -1,6 +1,7 @@
 import psycopg2
 from psycopg2.extras import Json
 from psycopg2.extensions import AsIs
+from pypika import PostgreSQLQuery, Table
 
 
 class PostgresDatabase:
@@ -34,20 +35,27 @@ class PostgresDatabase:
                 cursor.execute(sql, params)
         self.connection.commit()
 
-
     def get_ids(self, context, only_needed=False, limit=0):
-        sql_params = (context,)
-        sql = "SELECT a.id FROM available_items a"
-        if limit > 0:
-            sql += " JOIN spider_runs r ON (a.last_detail_check = r.id)"
-        sql += " WHERE a.context = %s"
+        items = Table('available_items')
+        runs = Table('spider_runs')
+        no_detail_yet = PostgreSQLQuery \
+            .from_(items) \
+            .select(items.id) \
+            .where(items.last_detail_check.isnull())
+        detail_available = PostgreSQLQuery \
+            .from_(items) \
+            .select(items.id) \
+            .join(runs) \
+            .on(items.last_detail_check == runs.id) \
+            .where(items.context == context) \
+            .orderby(runs.run_started_at)
         if only_needed:
-            sql += " AND a.detail_check_needed = True"
+            detail_available = detail_available.where(items.detail_check_needed)
+        q = no_detail_yet.union_all(detail_available)
         if limit > 0:
-            sql += " ORDER BY run_started_at LIMIT %s"
-            sql_params = sql_params + (limit,)
+            q = q.limit(limit)
         with self.connection.cursor() as cursor:
-            cursor.execute(sql, sql_params)
+            cursor.execute(q.get_sql())
             ids = [result[0] for result in cursor.fetchall()]
         return ids
 
@@ -91,7 +99,8 @@ class PostgresDatabase:
               " (%s, %s::CONTEXT_TYPE, %s, %s::JSONB, %s::DETAIL_STATUS_TYPE)) AS v" \
               " WHERE NOT EXISTS (SELECT * FROM latest_detail_items WHERE id = %s AND context = %s" \
               " AND status = %s AND item IS NOT DISTINCT FROM %s)"
-        sql_params = (item_id, spider.context, spider.run_id, json_item, status, item_id, spider.context, status, json_item)
+        sql_params = (
+        item_id, spider.context, spider.run_id, json_item, status, item_id, spider.context, status, json_item)
         with self.connection.cursor() as cursor:
             cursor.execute(sql, sql_params)
         self.connection.commit()
