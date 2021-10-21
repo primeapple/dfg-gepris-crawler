@@ -39,6 +39,20 @@ def google_cache_url(actual_url):
     return GOOGLE_CACHE_BASE_URL + actual_url
 
 
+def search_results_request(context, results_per_site, current_index, expected_items_on_page):
+    # It is important to use dont_filter=True,
+    # because the first request is redirected to itself, which makes scrapy filter this second request
+    # see: https://stackoverflow.com/questions/59705305/scrapy-thinks-redirects-are-duplicate-requests
+    return scrapy.FormRequest(
+        SEARCH_URL,
+        method='GET',
+        formdata=search_list_params(context=context, results_per_site=results_per_site, index=current_index),
+        dont_filter=True,
+        cb_kwargs=dict(items_on_page=expected_items_on_page),
+        meta=dict(expected_language='de')
+    )
+
+
 def details_request(url, language, refresh_cache=False, **kwargs):
     if language not in ['de', 'en']:
         raise ValueError(f'Language must be either "de" or "en", but was "{language}"')
