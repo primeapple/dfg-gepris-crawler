@@ -9,4 +9,7 @@ DDMMYYYY.html
 * **search_results**  
   CONTEXT_INDEX_ITEMSONPAGE_DDMMYYYY.html
 * **details**  
-  CONTEXT_ID_LANGUAGE_DDMMYYYY.html
+  * abgeschlossene Projekte:
+    CONTEXT_ID_LANGUAGE_finished_DDMMYYYY.html
+  * alle anderen:  
+    CONTEXT_ID_LANGUAGE_DDMMYYYY.html

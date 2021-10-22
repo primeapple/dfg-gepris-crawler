@@ -3,18 +3,18 @@ from datetime import datetime
 
 import scrapy
 from pytz import timezone
+from test.resources.settings import get_settings
+from test.resources.responses import fake_response_from_file
 from gepris_crawler.spiders.data_monitor import DataMonitorSpider
-import resources.settings as s
-import resources.responses as r
 
 
 class DataMonitorSpiderTest(unittest.TestCase):
 
     def setUp(self):
-        self.spider = DataMonitorSpider(settings=s.get_settings(database=False))
+        self.spider = DataMonitorSpider(settings=get_settings(database=False))
 
     def test_data_monitor(self):
-        result = self.spider.parse(r.fake_response_from_file('data_monitor/21102021.html'))
+        result = self.spider.parse(fake_response_from_file('data_monitor/21102021.html'))
         self.assertIsInstance(result, scrapy.Item)
         expected = {
             'last_update': datetime(2021, 10, 19).date(),

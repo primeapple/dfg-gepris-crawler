@@ -37,7 +37,7 @@ services:
       # recreating container and starting reinits the db with files in this dir
       - ./database/init:/docker-entrypoint-initdb.d
     ports:
-      - 54322:5432
+      - $POSTGRES_PORT_EXT:5432
     restart: unless-stopped
 
   adminer:

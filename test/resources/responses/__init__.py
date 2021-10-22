@@ -1,15 +1,16 @@
 import os
 
-from scrapy.http import Response, Request, TextResponse
+from scrapy.http import Request, TextResponse
 
 from gepris_crawler import gepris_helper
 
 
-def fake_response_from_file(file_name):
+def fake_response_from_file(file_name, request=None):
     """
     Create a Scrapy fake HTTP response from a HTML file
     @param file_name: The relative filename from the responses directory,
                       but absolute paths are also accepted.
+    @param request: Use this request for the response, if None, create one from the file
     returns: A scrapy HTTP response which can be used for unittesting.
     """
 
@@ -19,9 +20,11 @@ def fake_response_from_file(file_name):
     else:
         file_path = file_name
 
-    request = generate_request(file_path)
+    if request is None:
+        request = generate_request(file_path)
 
-    file_content = open(file_path, 'r').read()
+    with open(file_path, 'r') as f:
+        file_content = f.read()
 
     response = TextResponse(url=request.url,
                             request=request,
@@ -40,6 +43,9 @@ def generate_request(file_path):
         return gepris_helper.search_results_request(context, items_per_page, index, items_per_page)
     elif spider_name == 'details':
         file_name_without_type = file_name.split('.')[0]
-        context, element_id, language, date = file_name_without_type.split('_')
+        splitted = file_name_without_type.split('_')
+        context, element_id, language = splitted[:3]
         url = gepris_helper.details_url(element_id, context)
+        if context == 'projekt' and splitted[3] == 'finished':
+            url += '/ergebnisse'
         return gepris_helper.details_request(url, language)

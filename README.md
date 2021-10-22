@@ -41,14 +41,19 @@ If everything is correctly set up, there should now be a `test.json` file with c
 {"last_update": "2021-10-12", "last_approval": "2021-08-12", "gepris_version": "18.5.0", "current_index_version": "63037efd-37e0-424a-a956-438bfe91dc9d", "current_index_date": "2021-10-12 10:05:44", "finished_project_count": 34874, "project_count": 136266, "person_count": 87475, "institution_count": 37472, "humanities_count": 24936, "life_count": 48182, "natural_count": 34897, "engineering_count": 25362, "infrastructure_count": 11055}
 ]
 ```
+To later use the database please install some basic dependencies on your machine:
+```shell
+# this is only for Debian like Distros, please fill a request if you need it on another machine
+sudo apt-get install libpq-dev gcc 
+```
+
 
 ### Database
 The core of this application is the database. To set it up you need to have docker installed:
 ```sh
-# install database dependencies to access it later, this is only for Debian like Distros, please fill a request if you need it on another machine
-sudo apt-get install libpq-dev gcc 
 # setup database
-docker-compose up
+docker-compose --profile development build
+docker-compose --profile development up
 ```
 
 ### Running
@@ -60,6 +65,17 @@ Also you may need several Environment Variables set. Do NOT source the `.env` fi
 source outside_docker.sh
 # if you are using the fish shell, please run instead:
 exec bash -c "source outside_docker.sh; exec fish"
+```
+
+### Tests
+First make sure your test database is setup:
+```shell
+docker-compose --profile test up
+```
+
+Run the tests from the projects root directory with
+```shell
+python -m unittest
 ```
 
 ## Production

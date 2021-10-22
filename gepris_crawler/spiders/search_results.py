@@ -1,17 +1,15 @@
-import scrapy
 import math
 from .base import BaseSpider
-from ..gepris_helper import search_list_params, SEARCH_URL
+from ..gepris_helper import search_results_request
 from ..items import SearchResultLoader
 
 
 class SearchResultsSpider(BaseSpider):
     name = 'search_results'
     allowed_domains = ['gepris.dfg.de']
-    # 1 Concurrent Request is fast enough, if we use a lot of items per page
+    # 2 Concurrent Request is fast enough, if we use a lot of items per page
     custom_settings = dict(
-        CONCURRENT_REQUESTS=1,
-        HTTPCACHE_ENABLED=False
+        CONCURRENT_REQUESTS=2,
     )
     items_per_page = 1000
     total_items = math.inf
@@ -33,17 +31,7 @@ class SearchResultsSpider(BaseSpider):
             items_on_this_page = min(self.items_per_page, self.total_items - current_index)
             self.logger.info(
                 f'Starting Request for items {current_index} to {current_index + items_on_this_page} of total {self.total_items} items')
-            # It is important to use dont_filter=True,
-            # because the first request is redirected to itself, which makes scrapy filter this second request
-            # see: https://stackoverflow.com/questions/59705305/scrapy-thinks-redirects-are-duplicate-requests
-            yield scrapy.FormRequest(
-                SEARCH_URL,
-                method='GET',
-                formdata=search_list_params(context=self.context, results_per_site=self.items_per_page, index=current_index),
-                dont_filter=True,
-                cb_kwargs=dict(items_on_page=items_on_this_page),
-                meta=dict(expected_language='de')
-            )
+            yield search_results_request(self.context, self.items_per_page, current_index, items_on_this_page)
             current_index += self.items_per_page
 
     def parse(self, response, items_on_page):

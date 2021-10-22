@@ -4,8 +4,8 @@ import types
 import scrapy
 
 from gepris_crawler.spiders.search_results import SearchResultsSpider
-import resources.settings as s
-import resources.responses as r
+from test.resources import responses
+from test.resources.settings import get_settings
 
 
 class SearchResultsSpiderTest(unittest.TestCase):
@@ -58,11 +58,11 @@ class SearchResultsSpiderTest(unittest.TestCase):
         self._test_parse('institution', 'search_results/institution_9290_10_21102021.html', 10, fifth_item, expected_item_index=4)
 
     def _test_parse(self, context, file, items_per_page, expected_item, expected_item_index=0):
-        spider = SearchResultsSpider(context=context, items=items_per_page, settings=s.get_settings(database=False))
-        result = spider.parse(r.fake_response_from_file(file), items_per_page)
+        spider = SearchResultsSpider(context=context, items=items_per_page, settings=get_settings(database=False))
+        result = spider.parse(responses.fake_response_from_file(file), items_per_page)
         self.assertIsInstance(result, types.GeneratorType)
         items = [i for i in result]
-        self.assertEquals(len(items), items_per_page)
+        self.assertEqual(len(items), items_per_page)
         for item in items:
             self.assertIsInstance(item, scrapy.Item)
         item = items[expected_item_index]

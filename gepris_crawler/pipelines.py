@@ -31,11 +31,11 @@ class DatabaseInsertionPipeline:
 
     def close_spider(self, spider):
         if spider.name == 'details':
-            spider.db.update_run(spider.run_id, self.scraped_items)
+            spider.db.update_run_result(spider.run_id, self.scraped_items)
             if spider.context == 'projekt':
                 spider.db.create_references_from_details_run(spider)
         elif spider.name == 'search_results':
-            spider.db.update_run(spider.run_id, self.scraped_items)
+            spider.db.update_run_result(spider.run_id, self.scraped_items)
             spider.db.mark_not_found_available_items(spider)
 
     def process_item(self, item, spider):

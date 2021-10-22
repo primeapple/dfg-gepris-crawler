@@ -5,6 +5,8 @@ set +a
 # enable outside access of database
 export POSTGRES_PORT=$POSTGRES_PORT_EXT
 export POSTGRES_HOST=$POSTGRES_HOST_EXT
+# disable proxies
+unset WEBSHARE_PROXY_LIST_URL
 # disable mail logging
 #unset NOTIFICATION_EMAIL_USERNAME
 #unset NOTIFICATION_EMAIL_PASSWORD
