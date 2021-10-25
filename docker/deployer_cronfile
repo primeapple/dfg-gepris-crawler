@@ -1,0 +1,1 @@
+0 * * * * cd opt/app/dfg-gepris && scrapyd-client schedule -p gepris-crawler data_monitor

@@ -63,3 +63,17 @@ services:
       - ./volumes/scrapyd:/var/lib/scrapyd
       - /usr/local/lib/python3.9/dist-packages
     restart: unless-stopped
+
+  deployer:
+    build:
+      context: .
+      dockerfile: ./docker/deployer.Dockerfile
+    environment:
+      - TZ=Europe/Berlin
+    profiles:
+      - production
+    depends_on:
+      - scrapyd
+      - db
+    command: ["cron", "-f"]
+    restart: unless-stopped

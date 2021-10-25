@@ -14,5 +14,5 @@ unset NOTIFICATION_EMAIL_SMTP_SERVER
 unset NOTIFICATION_EMAIL_SMTP_PORT
 unset NOTIFICATION_EMAIL_RECEIVER
 unset NOTIFICATION_EMAIL_SENDER
-# disable adminer
+# disable adminer port (its still running)
 unset ADMINER_PORT_EXT
