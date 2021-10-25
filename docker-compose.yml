@@ -49,7 +49,7 @@ services:
   scrapyd:
     build:
       context: .
-      dockerfile: scrapyd.Dockerfile
+      dockerfile: ./docker/scrapyd.Dockerfile
     ports:
       - 6800:6800
     env_file:
