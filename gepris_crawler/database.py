@@ -1,8 +1,8 @@
 import psycopg2
 from psycopg2.extras import Json
-from psycopg2.extensions import AsIs
 from pypika import PostgreSQLQuery, Table
 from pypika.functions import CurTimestamp
+from pypika.terms import ExistsCriterion
 
 
 class PostgresDatabase:
@@ -155,3 +155,15 @@ class PostgresDatabase:
             .set(runs.total_scraped_items, total_items) \
             .where(runs.id.eq(run_id))
         self.execute_sql(q.get_sql())
+
+    def get_latest_dm_stat(self, stat):
+        dm = Table('data_monitor', alias='d1')
+        sub_dm = Table('data_monitor', alias='d2')
+        q = PostgreSQLQuery.select(dm.field(stat)).from_(dm).where(ExistsCriterion(
+            PostgreSQLQuery.select(sub_dm.run_ended_at).from_(sub_dm).where(sub_dm.run_ended_at > dm.run_ended_at)
+        ).negate())
+        result = self.execute_sql(q.get_sql(), fetch=True)
+        if len(result) == 1:
+            return self.execute_sql(q.get_sql(), fetch=True)[0][0]
+        else:
+            return None

@@ -21,6 +21,7 @@ class BaseSpider(scrapy.Spider, ABC):
 
     def __init__(self, context=None, settings=None, *args, **kwargs):
         super(BaseSpider, self).__init__(*args, **kwargs)
+        self.had_error = False
         self.db = None
         if not settings.getbool('NO_DB'):
             self.db = PostgresDatabase(settings)
