@@ -1,2 +1,2 @@
 #!/bin/sh
-scrapyd-deploy production && exec "$@"
+scrapyd-deploy && exec "$@"

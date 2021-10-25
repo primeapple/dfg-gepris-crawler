@@ -12,7 +12,7 @@ WORKDIR $APP_HOME
 # copy the important stuff for deploying
 # cant merge this two lines, because it extracts all the files in gepris_crawler into $APP_HOME
 COPY gepris_crawler gepris_crawler/
-COPY __init__.py setup.py scrapy.cfg docker/deployer_cronfile docker/entrypoint.sh ${APP_HOME}
+COPY __init__.py setup.py docker/scrapy.cfg docker/deployer_cronfile docker/entrypoint.sh ${APP_HOME}
 
 # Write the crontab:
 # run foekat_farmer_cron.sh to download the csv file every day at 2 am

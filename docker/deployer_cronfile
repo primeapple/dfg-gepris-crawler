@@ -1,1 +1,3 @@
-0 * * * * cd opt/app/dfg-gepris && scrapyd-client schedule -p gepris-crawler data_monitor
+HOME=/opt/app/dfg-gepris/
+PATH=/usr/local/bin:/usr/bin:/bin
+* * * * * scrapyd-client schedule -p gepris_crawler data_monitor > /proc/1/fd/1 2>/proc/1/fd/2
