@@ -3,7 +3,8 @@ from datetime import datetime
 
 import scrapy
 from pytz import timezone
-from test.resources.settings import get_settings
+
+from test.resources import get_settings
 from test.resources.responses import fake_response_from_file
 from gepris_crawler.spiders.data_monitor import DataMonitorSpider
 

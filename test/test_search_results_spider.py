@@ -4,8 +4,7 @@ import types
 import scrapy
 
 from gepris_crawler.spiders.search_results import SearchResultsSpider
-from test.resources import responses
-from test.resources.settings import get_settings
+from test.resources import responses, get_settings
 
 
 class SearchResultsSpiderTest(unittest.TestCase):

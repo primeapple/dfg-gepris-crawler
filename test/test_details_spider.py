@@ -3,8 +3,7 @@ import unittest
 import scrapy
 
 from gepris_crawler.spiders.details import DetailsSpider
-from test.resources import responses
-from test.resources.settings import get_settings
+from test.resources import responses, get_settings
 
 
 class DetailsSpiderTest(unittest.TestCase):
@@ -41,6 +40,9 @@ class DetailsSpiderTest(unittest.TestCase):
         expected_item['name_en'] = 'Integrated Research Training Group (MGK)'
         expected_item['beschreibung_en'] = expected_item['beschreibung_de']
         self.assertEqual(dict(item), expected_item)
+
+    def test_projekt_with_result(self):
+        self.fail()
 
     def test_person(self):
         item = {
