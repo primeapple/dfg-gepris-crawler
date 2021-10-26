@@ -64,10 +64,10 @@ services:
       - /usr/local/lib/python3.9/dist-packages
     restart: unless-stopped
 
-  deployer:
+  scheduler:
     build:
       context: .
-      dockerfile: ./docker/deployer.Dockerfile
+      dockerfile: ./docker/scheduler.Dockerfile
     environment:
       - TZ=Europe/Berlin
     profiles:

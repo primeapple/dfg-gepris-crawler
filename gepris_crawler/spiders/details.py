@@ -46,7 +46,7 @@ class DetailsSpider(BaseSpider):
                 self.ids = self.db.get_ids(self.context, only_needed=True, limit=int(limit))
             else:
                 raise ValueError('If you want the ids from the database please provide either "db:all:{NUMBER}" or '
-                                 '"db:needed:{number}"')
+                                 '"db:needed:{NUMBER}"')
         else:
             raise ValueError(
                 f"Wrong format of the 'ids' argument, was {self.ids}, of type {type(self.ids)}, if you want to access "

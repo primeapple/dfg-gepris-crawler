@@ -8,8 +8,6 @@ class DataMonitorSpider(BaseSpider):
     allowed_domains = ['gepris.dfg.de']
     start_urls = [data_monitor_url()]
 
-    custom_settings = dict(HTTPCACHE_ENABLED=False)
-
     def __init__(self, *args, **kwargs):
         super(DataMonitorSpider, self).__init__(*args, **kwargs)
 

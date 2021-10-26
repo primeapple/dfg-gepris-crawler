@@ -67,7 +67,8 @@ class EmailNotifierPipeline:
                 or settings.get('MAIL_USER') is None \
                 or settings.get('MAIL_PASS') is None \
                 or settings.get('MAIL_HOST') is None \
-                or settings.get('MAIL_PORT') is None:
+                or settings.get('MAIL_PORT') is None \
+                or settings.getbool('NO_DB'):
             raise NotConfigured
         else:
             return cls(settings)
