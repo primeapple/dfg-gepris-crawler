@@ -36,6 +36,8 @@ def get_settings(database=False, mail=False):
         settings.set('MAIL_PASS', 'test@localhost.com')
         settings.set('MAIL_HOST', 'test@localhost.com')
         settings.set('MAIL_PORT', 123)
+    else:
+        settings.set('MAIL_RECEIVER', None)
     return settings
 
 
