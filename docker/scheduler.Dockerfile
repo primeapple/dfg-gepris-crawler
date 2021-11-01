@@ -2,7 +2,7 @@ FROM python:3.9-slim
 LABEL maintainer=toni.mueller@student.uni-halle.de
 # install dependencies
 RUN apt-get --yes update && \
-    apt-get --yes install gcc cron libxml2-dev libxslt1-dev libffi-dev python3-dev cargo build-essential
+    apt-get --yes install gcc cron libxml2-dev libxslt1-dev libffi-dev libssl-dev python3-dev cargo build-essential
 RUN pip install --upgrade pip
 RUN pip install scrapyd-client
 
