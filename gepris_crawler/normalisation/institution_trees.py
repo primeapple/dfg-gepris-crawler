@@ -25,6 +25,7 @@ def normalise_institutions(institutions):
 
 
 def add_normalised_subinstitution_tree(institution_trees_dict):
-    if (sub_institutions := institution_trees_dict.get(ORIGINAL_SUBINSTITUTIONS_KEY)) is not None:
+    sub_institutions = institution_trees_dict.get(ORIGINAL_SUBINSTITUTIONS_KEY)
+    if sub_institutions is not None:
         institution_trees_dict[NORMALISED_SUBINSTITUTIONS_KEY] = normalise_institutions(sub_institutions)
     return institution_trees_dict

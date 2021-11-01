@@ -88,7 +88,8 @@ class DetailsSpider(BaseSpider):
                                      content.xpath('.//div[@id="projektbeschreibung"]/div[@id="projekttext"]'),
                                      err_mult=False))
         new_project_item = ProjectItem({**dict(project_item), **dict(project_loader.load_item())})
-        if len(result_list := content.xpath('.//li[@id="tabbutton2"]/a')) == 1:
+        result_list = content.xpath('.//li[@id="tabbutton2"]/a')
+        if len(result_list) == 1:
             return details_request(urljoin(url_query_cleaner(response.url), result_list.attrib['href']), 'de',
                                    callback=self.parse_project_result,
                                    cb_kwargs=dict(project_item=new_project_item))
