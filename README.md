@@ -115,7 +115,17 @@ Some of the tests are heavily mocked. Some require local `.html` files. Some are
 Look into the [test](test) module for more information.
 
 ## Production
+In Production there is a cronjob running, that schedules the spiders regularly.
+Look into the [cronfile](docker/scheduler_cronfile) to see what is happening exactly.
 
+To run it on a AMD64 Architecture, use profile `production`.
+If you are running this on an ARM Architecture, please use the `docker-compose.arm.yml` file like:
+```shell
+docker-compose -f docker-compose.yml -f docker-compose.arm.yml --profile production up --build
+```
+
+There is the possible to receive automatic email messages for important spider runs.
+Please fill the specified entries in your `.env` file.
 
 ## Running the spiders
 The commands to run the spiders in `development` and `production` should be clear until this point.

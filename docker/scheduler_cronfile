@@ -1,11 +1,11 @@
 HOME=/opt/app/dfg-gepris/
 PATH=/usr/local/bin:/usr/bin:/bin
 * * * * * scrapyd-client schedule -p gepris_crawler data_monitor > /proc/1/fd/1 2>/proc/1/fd/2
-jeden Abend 20 Uhr - data_monitor
-jede Nacht 2 Uhr - search_results - projekte
-jede Nacht 2.50 Uhr - details - projekte - alle neuen
-jede Nacht 3 Uhr - search_results - personen
-jede Nacht 3.50 Uhr - details - personen - alle neuen
-jede Nacht 4 Uhr - search_results - institute
-jede Nacht 4.50 Uhr - details - institute - alle neuen
-jede Nacht 5.00 Uhr - details - lru 20000 projekte
+# jeden Abend 20 Uhr - data_monitor
+# jede Nacht 2 Uhr - search_results - projekte
+# jede Nacht 2.50 Uhr - details - projekte - alle neuen
+# jede Nacht 3 Uhr - search_results - personen
+# jede Nacht 3.50 Uhr - details - personen - alle neuen
+# jede Nacht 4 Uhr - search_results - institute
+# jede Nacht 4.50 Uhr - details - institute - alle neuen
+# jede Nacht 5.00 Uhr - details - lru 20000 projekte
