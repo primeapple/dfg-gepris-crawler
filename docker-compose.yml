@@ -72,8 +72,5 @@ services:
       - TZ=Europe/Berlin
     profiles:
       - production
-    depends_on:
-      - scrapyd
-      - db
     command: ["cron", "-f"]
     restart: unless-stopped

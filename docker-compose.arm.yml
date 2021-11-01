@@ -1,0 +1,18 @@
+version: '3'
+services:
+  scrapyd:
+    build:
+      context: .
+      dockerfile: docker/scrapyd_arm.Dockerfile
+    ports:
+      - 6800:6800
+    env_file:
+      - .env
+    environment:
+      - TZ=Europe/Berlin
+    profiles:
+      - production
+    volumes:
+      - ./volumes/scrapyd:/var/lib/scrapyd
+      - /usr/local/lib/python3.7/dist-packages
+    restart: unless-stopped
