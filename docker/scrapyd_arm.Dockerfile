@@ -30,6 +30,7 @@ RUN set -xe \
                           python3-dev \
                           python3-distutils \
                           vim-tiny \
+                          cargo \
     && apt-get install -y libtiff5 \
                           libtiff5-dev \
                           libfreetype6-dev \
@@ -71,7 +72,7 @@ VOLUME /etc/scrapyd/ /var/lib/scrapyd/
 EXPOSE 6800
 
 # the following is my stuff
-RUN apt-get --yes install libpq-dev gcc cargo
+RUN apt-get --yes install libpq-dev gcc
 COPY requirements.txt ./
 RUN pip install -r requirements.txt
 COPY docker/scrapyd.conf /etc/scrapyd/
