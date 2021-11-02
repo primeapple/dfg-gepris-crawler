@@ -73,4 +73,7 @@ services:
     profiles:
       - production
     command: ["cron", "-f"]
+    depends_on:
+      - scrapyd
+      - db
     restart: unless-stopped
