@@ -3,6 +3,8 @@
 # it is mostly taken from https://github.com/vimagick/dockerfiles/blob/master/scrapyd/arm/Dockerfile
 # because the published version easypi/scrapyd-arm is not up to date yet
 #
+# I added installation of libpq-dev, gcc and cargo, as well as some pip packages
+#
 
 FROM debian:bullseye
 MAINTAINER EasyPi Software Foundation
@@ -42,6 +44,8 @@ RUN set -xe \
                           libwebp-dev \
                           zlib1g \
                           zlib1g-dev \
+                          libpq-dev \
+                          gcc \
     && curl -sSL https://bootstrap.pypa.io/get-pip.py | python3 \
     && pip install --no-cache-dir git+https://github.com/scrapy/scrapy.git@$SCRAPY_VERSION \
                    git+https://github.com/scrapy/scrapyd.git@$SCRAPYD_VERSION \
@@ -72,7 +76,6 @@ VOLUME /etc/scrapyd/ /var/lib/scrapyd/
 EXPOSE 6800
 
 # the following is my stuff
-RUN apt-get --yes install libpq-dev gcc
 COPY requirements.txt ./
 RUN pip install -r requirements.txt
 COPY docker/scrapyd.conf /etc/scrapyd/
