@@ -44,7 +44,7 @@ RUN set -xe \
                           libpq-dev \
                           gcc \
     && pip install --no-cache-dir git+https://github.com/scrapy/scrapy.git@$SCRAPY_VERSION \
-                   git+https://github.com/scrapy/scrapyd.git@$SCRAPYD_VERSION \
+                   git+https://github.com/scrapy/scrapyd.git@$SCRAPYD_VERSION
 
 # the following is my stuff
 COPY requirements.txt ./
