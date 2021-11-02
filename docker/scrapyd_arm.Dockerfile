@@ -71,7 +71,7 @@ VOLUME /etc/scrapyd/ /var/lib/scrapyd/
 EXPOSE 6800
 
 # the following is my stuff
-RUN apt-get --yes install libpq-dev gcc
+RUN apt-get --yes install libpq-dev gcc cargo
 COPY requirements.txt ./
 RUN pip install -r requirements.txt
 COPY docker/scrapyd.conf /etc/scrapyd/
