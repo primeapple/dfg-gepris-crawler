@@ -14,5 +14,5 @@ services:
       - production
     volumes:
       - ./volumes/scrapyd:/var/lib/scrapyd
-      - /usr/local/lib/python3.7/dist-packages
+      - /usr/local/lib/python3.9/dist-packages
     restart: unless-stopped

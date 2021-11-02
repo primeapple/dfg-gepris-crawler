@@ -23,7 +23,7 @@ RUN set -xe \
                           python3 \
                           python3-dev \
                           python3-distutils \
-                          vim-tiny \
+                          cargo \
     && apt-get install -y libtiff5 \
                           libtiff5-dev \
                           libfreetype6-dev \
