@@ -34,3 +34,9 @@ class DataMonitorSpiderTest(unittest.TestCase):
             'infrastructure_count': 11066
         }
         self.assertDictEqual(dict(result), expected)
+
+    def test_data_monitor_index_date(self):
+        result = self.spider.parse(fake_response_from_file('data_monitor/03112021.html'))
+        self.assertIsInstance(result, scrapy.Item)
+        self.assertEqual(result['current_index_date'],
+                         timezone('Europe/Berlin').localize(datetime(2021, 11, 2, 9, 25, 7)))

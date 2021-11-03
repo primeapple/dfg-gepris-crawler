@@ -1,3 +1,4 @@
+import re
 from datetime import datetime
 from pytz import timezone
 from .gepris_helper import is_gepris_path
@@ -86,7 +87,9 @@ def to_list(value):
     return [value]
 
 
-def to_datetime(value, dateformat, only_date=False):
+def to_datetime(value, dateformat, only_date=False, remove_timezone=False):
+    if remove_timezone:
+        value = re.sub(r'CES?T ', '', value)
     dt = CEST.localize(datetime.strptime(value, dateformat))
     return dt.date() if only_date else dt
 

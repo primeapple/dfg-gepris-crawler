@@ -171,5 +171,5 @@ class DataMonitorLoader(scrapy.loader.ItemLoader):
     last_approval_out = Compose(TakeFirst(), lambda x: to_datetime(x, '%d.%m.%Y', only_date=True))
     gepris_version_out = TakeFirst()
     current_index_version_out = TakeFirst()
-    current_index_date_out = Compose(TakeFirst(), lambda x: to_datetime(x, '%a %b %d %H:%M:%S CEST %Y',
-                                                                        only_date=False))
+    current_index_date_out = Compose(TakeFirst(), lambda x: to_datetime(x, '%a %b %d %H:%M:%S %Y',
+                                                                        only_date=False, remove_timezone=True))
