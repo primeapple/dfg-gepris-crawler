@@ -84,11 +84,27 @@ class DetailsSpiderTest(unittest.TestCase):
                 'adresse': 'Universitätsklinikum Köln, Zentrum für Klinische Studien Köln (ZKS),'
                            ' Herder Straße 52-54, 50931 Köln',
                 'internet': 'tinyurl.com/cornelylab'
+            },
+            'trees': {
+                'normalised_projects': [
+                    {
+                        'Als beteiligter Wissenschaftler': [
+                            {
+                                'laufende Projekte': [
+                                    '390661388'
+                                ]
+                            }, {
+                                'abgeschlossene Projekte': [
+                                    '39010820'
+                                ]
+                            }
+                        ]
+                    }
+                ]
             }
         }
         result_dict = self._test_parse_german_non_projekt('person', 215969423,
                                                           'details/person_215969423_de_22102021.html')
-        result_dict.pop('trees', None)
         self.assertDictEqual(result_dict, item)
 
     def test_institution(self):
@@ -109,13 +125,33 @@ class DetailsSpiderTest(unittest.TestCase):
                         '980512': ['981182']
                     },
                     '460342185'
+                ],
+                'normalised_projects': [
+                    {
+                        'Großgeräte der Länder': [
+                            {
+                                'laufende Projekte': [
+                                    '432830299',
+                                    '453465585'
+                                ]
+                            },
+                            {
+                                'abgeschlossene Projekte': [
+                                    '276335622',
+                                    '213855912',
+                                    '227997273',
+                                    '192182983',
+                                    '105287672'
+                                ]
+                            }
+                        ]
+                    }
+
                 ]
             }
         }
         result_dict = self._test_parse_german_non_projekt('institution', 12957,
                                                           'details/institution_12957_de_22102021.html')
-        result_dict['trees'].pop('projekteNachProgrammen', None)
-        result_dict['trees'].pop('untergeordneteInstitutionen', None)
         self.assertDictEqual(result_dict, item)
 
     def _test_parse_german_non_projekt(self, context, element_id, file):

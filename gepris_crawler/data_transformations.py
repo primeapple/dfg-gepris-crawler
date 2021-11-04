@@ -49,6 +49,10 @@ def get_reference_path(value):
     return value['path']
 
 
+def get_reference_children(value):
+    return value.get('children')
+
+
 def split_comma_space(value):
     return value.split(', ')
 

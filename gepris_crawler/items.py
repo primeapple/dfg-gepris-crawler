@@ -14,7 +14,7 @@ from .normalisation.project_attributes import normalise as nm_project
 from .normalisation.project_result_attributes import normalise as nm_project_result
 from .normalisation.person_attributes import normalise as nm_person
 from .normalisation.institution_attributes import normalise as nm_institution
-from .normalisation.institution_trees import add_normalised_subinstitution_tree
+from .normalisation.trees import normalise_institution_trees, normalise_person_trees
 
 
 ################# ITEMS #################
@@ -150,6 +150,7 @@ class PersonDetailsLoader(AbstractDetailsLoader):
     verstorben_in = MapCompose(has_crucifix_prefix)
     gender_in = MapCompose(guess_gender_from_title)
     attributes_out = Compose(AbstractDetailsLoader.attributes_out, nm_person, dict)
+    trees_out = Compose(TakeFirst(), normalise_person_trees)
 
 
 class InstitutionDetailsLoader(AbstractDetailsLoader):
@@ -158,8 +159,7 @@ class InstitutionDetailsLoader(AbstractDetailsLoader):
     # see https://gepris.dfg.de/gepris/institution/260863308 for an institution with multiple lines
     name_de_out = Join(', ')
     attributes_out = Compose(AbstractDetailsLoader.attributes_out, nm_institution, dict)
-    # see for an institution with subinsitutions: https://gepris.dfg.de/gepris/institution/10075
-    trees_out = Compose(TakeFirst(), add_normalised_subinstitution_tree)
+    trees_out = Compose(TakeFirst(), normalise_institution_trees)
 
 
 # loader for other spiders
