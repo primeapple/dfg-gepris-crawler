@@ -1,13 +1,43 @@
 import unittest
 
 import scrapy
+from psycopg2.extras import Json
+from pypika import Query
 
 from gepris_crawler.spiders.details import DetailsSpider
-from test.resources import responses, get_settings
+from test.resources import responses, get_settings, get_test_database
 
 
 class DetailsSpiderTest(unittest.TestCase):
     maxDiff = None
+
+    def test_ids_parsing(self):
+        # db setup
+        self.settings = get_settings(database=True)
+        self.db = get_test_database(self.settings)
+        self.db.store_run('search_results', 'projekt')
+        self.db.store_run('details', 'projekt')
+        self.db.execute_sql(Query.into('available_items')
+                            .insert(1, 'projekt', 1, 1, None, None, True)
+                            .insert(2, 'projekt', 1, 1, None, None, True)
+                            .insert(3, 'projekt', 1, 1, Json({'name_de': 'test3'}), 2, False)
+                            .insert(4, 'projekt', 1, 1, Json({'name_de': 'test4'}), 2, False)
+                            .get_sql()
+                            )
+        self.db.close()
+
+        # parsing test
+        spider = DetailsSpider(context='person', ids='[0,1]', settings=self.settings)
+        self.assertIsInstance(spider.ids, set)
+        self.assertListEqual(list(spider.ids),  [0, 1])
+
+        spider = DetailsSpider(context='projekt', ids='db:needed:4', settings=self.settings)
+        self.assertIsInstance(spider.ids, set)
+        self.assertListEqual(list(spider.ids),  [1, 2])
+
+        spider = DetailsSpider(context='projekt', ids='db:all:4', settings=self.settings)
+        self.assertIsInstance(spider.ids, set)
+        self.assertListEqual(list(spider.ids),  [1, 2, 3, 4])
 
     def test_projekt_without_result(self):
         expected_item = {

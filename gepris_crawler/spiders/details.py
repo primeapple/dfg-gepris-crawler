@@ -15,7 +15,6 @@ class DetailsSpider(BaseSpider):
 
     def __init__(self, ids, context, *args, **kwargs):
         super().__init__(context, *args, **kwargs)
-        self.ids = ids
         if self.context == 'person':
             self.context_loader_cls = PersonDetailsLoader
             self.context_load_function = self.load_person
@@ -25,33 +24,33 @@ class DetailsSpider(BaseSpider):
         elif self.context == 'projekt':
             self.context_loader_cls = ProjectDetailsLoader
             self.context_load_function = self.load_project
+        self.ids = self._parse_ids(ids)
 
-    def start_requests(self):
-        # creating/reading ids
-        if isinstance(self.ids, str) and self.ids.startswith('[') and self.ids.endswith(']'):
+    def _parse_ids(self, ids_str):
+        if isinstance(ids_str, str) and ids_str.startswith('[') and ids_str.endswith(']'):
             # ids like "[1,2,3]"
-            self.ids = {int(element_id) for element_id in self.ids[1:-1].split(',')}
-        elif isinstance(self.ids, str) and self.ids.endswith('.json'):
+            return {int(element_id) for element_id in ids_str[1:-1].split(',')}
+        elif isinstance(ids_str, str) and ids_str.endswith('.json'):
             # ids like "projekts.json", a json file, that is an array where each child object has key 'id'
-            with open(self.ids) as f:
-                self.ids = {p['id'] for p in json.load(f)}
-        elif isinstance(self.ids, str) and re.match(r'db:(all|needed):\d+', self.ids) and self.db is not None:
-            limit = self.ids.split(':')[2]
-            self.ids = self.db.get_ids(self.context, limit=int(limit))
-            if self.ids.startswith('db:all'):
+            with open(ids_str) as f:
+                return {p['id'] for p in json.load(f)}
+        elif isinstance(ids_str, str) and re.match(r'db:(all|needed):\d+', ids_str) and self.db is not None:
+            limit = ids_str.split(':')[2]
+            if ids_str.startswith('db:all'):
                 # all ids of the context from the scrapy items table in the database
-                self.ids = self.db.get_ids(self.context, limit=int(limit))
-            elif self.ids.startswith('db:needed'):
+                return set(self.db.get_ids(self.context, limit=int(limit)))
+            elif ids_str.startswith('db:needed'):
                 # all ids of the context from the scrapy items table in the database, that should be rescraped based on heuristics
-                self.ids = self.db.get_ids(self.context, only_needed=True, limit=int(limit))
+                return set(self.db.get_ids(self.context, only_needed=True, limit=int(limit)))
             else:
                 raise ValueError('If you want the ids from the database please provide either "db:all:{NUMBER}" or '
                                  '"db:needed:{NUMBER}"')
         else:
             raise ValueError(
-                f"Wrong format of the 'ids' argument, was {self.ids}, of type {type(self.ids)}, if you want to access "
+                f"Wrong format of the 'ids_str' argument, was {ids_str}, of type {type(ids_str)}, if you want to access "
                 "the db, do not enable setting 'NO_DB'")
 
+    def start_requests(self):
         for element_id in self.ids:
             yield details_request(details_url(element_id, self.context), 'de',
                                   refresh_cache=self.settings.getbool('HTTPCACHE_FORCE_REFRESH'),

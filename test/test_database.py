@@ -35,6 +35,7 @@ class DatabaseTest(TestCase):
         self.assertListEqual(self.db.get_ids('projekt', limit=2), [1, 2])
         self.assertListEqual(self.db.get_ids('projekt', only_needed=True), [1, 2, 4])
         self.assertListEqual(self.db.get_ids('projekt', limit=2, only_needed=True), [1, 2])
+        self.assertListEqual(self.db.get_ids('person', limit=2, only_needed=True), [])
 
     def test_upsert_available_items_search_results(self):
         self.db.execute_sql(Query.into('spider_runs')

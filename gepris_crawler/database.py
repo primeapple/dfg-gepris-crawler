@@ -46,6 +46,7 @@ class PostgresDatabase:
         no_detail_yet = PostgreSQLQuery \
             .from_(items) \
             .select(items.id) \
+            .where(items.context == context) \
             .where(items.last_detail_check.isnull())
         detail_available = PostgreSQLQuery \
             .from_(items) \
