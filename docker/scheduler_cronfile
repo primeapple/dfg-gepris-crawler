@@ -14,20 +14,20 @@ PATH=/usr/local/bin:/usr/bin:/bin
 50 1 * * * scrapyd-client schedule -p gepris_crawler --arg context=person --arg ids=db:needed:100 details  > /proc/1/fd/1 2>/proc/1/fd/2
 # every day 02.00 - search_results - projekt
 0 2 * * * scrapyd-client schedule -p gepris_crawler --arg context=projekt search_results  > /proc/1/fd/1 2>/proc/1/fd/2
-# every day 02.50 - details - projekt - only new (max 100)
+# every day 03.10 - details - projekt - only new (max 100)
 50 2 * * * scrapyd-client schedule -p gepris_crawler --arg context=projekt --arg ids=db:needed:100 details  > /proc/1/fd/1 2>/proc/1/fd/2
 ### 50000 Details requests a day for Re-Indexing to detect changes ###
-# 1. of month at 03.00 - details - institution - all (max 50000), sorted by last scrap descending
-# 2.-4., 6.-9. of month at 03.00 - details - projekt - all (max 50000), sorted by last scrap descending
-# 5., 10. of month at 03.00 - details - person - all (max 50000), sorted by last scrap descending
+# 1. of month at 03.30 - details - institution - all (max 50000), sorted by last scrap descending
+# 2.-4., 6.-9. of month at 03.30 - details - projekt - all (max 50000), sorted by last scrap descending
+# 5., 10. of month at 03.30 - details - person - all (max 50000), sorted by last scrap descending
 # every command is repeated every 10th day, except for 31. of month, where nothing is done
-0 3 1,11,21 * * scrapyd-client schedule -p gepris_crawler --arg context=institution --arg ids=db:all:50000 details  > /proc/1/fd/1 2>/proc/1/fd/2
-0 3 2,12,22 * * scrapyd-client schedule -p gepris_crawler --arg context=projekt --arg ids=db:all:20000 details  > /proc/1/fd/1 2>/proc/1/fd/2
-0 3 3,13,23 * * scrapyd-client schedule -p gepris_crawler --arg context=projekt --arg ids=db:all:20000 details  > /proc/1/fd/1 2>/proc/1/fd/2
-0 3 4,14,24 * * scrapyd-client schedule -p gepris_crawler --arg context=projekt --arg ids=db:all:20000 details  > /proc/1/fd/1 2>/proc/1/fd/2
-0 3 5,15,25 * * scrapyd-client schedule -p gepris_crawler --arg context=person --arg ids=db:all:50000 details  > /proc/1/fd/1 2>/proc/1/fd/2
-0 3 6,16,26 * * scrapyd-client schedule -p gepris_crawler --arg context=projekt --arg ids=db:all:20000 details  > /proc/1/fd/1 2>/proc/1/fd/2
-0 3 7,17,27 * * scrapyd-client schedule -p gepris_crawler --arg context=projekt --arg ids=db:all:20000 details  > /proc/1/fd/1 2>/proc/1/fd/2
-0 3 8,18,28 * * scrapyd-client schedule -p gepris_crawler --arg context=projekt --arg ids=db:all:20000 details  > /proc/1/fd/1 2>/proc/1/fd/2
-0 3 9,19,29 * * scrapyd-client schedule -p gepris_crawler --arg context=projekt --arg ids=db:all:20000 details  > /proc/1/fd/1 2>/proc/1/fd/2
-0 3 10,20,30 * * scrapyd-client schedule -p gepris_crawler --arg context=person --arg ids=db:all:50000 details  > /proc/1/fd/1 2>/proc/1/fd/2
+30 3 1,11,21 * * scrapyd-client schedule -p gepris_crawler --arg context=institution --arg ids=db:all:50000 details  > /proc/1/fd/1 2>/proc/1/fd/2
+30 3 2,12,22 * * scrapyd-client schedule -p gepris_crawler --arg context=projekt --arg ids=db:all:20000 details  > /proc/1/fd/1 2>/proc/1/fd/2
+30 3 3,13,23 * * scrapyd-client schedule -p gepris_crawler --arg context=projekt --arg ids=db:all:20000 details  > /proc/1/fd/1 2>/proc/1/fd/2
+30 3 4,14,24 * * scrapyd-client schedule -p gepris_crawler --arg context=projekt --arg ids=db:all:20000 details  > /proc/1/fd/1 2>/proc/1/fd/2
+30 3 5,15,25 * * scrapyd-client schedule -p gepris_crawler --arg context=person --arg ids=db:all:50000 details  > /proc/1/fd/1 2>/proc/1/fd/2
+30 3 6,16,26 * * scrapyd-client schedule -p gepris_crawler --arg context=projekt --arg ids=db:all:20000 details  > /proc/1/fd/1 2>/proc/1/fd/2
+30 3 7,17,27 * * scrapyd-client schedule -p gepris_crawler --arg context=projekt --arg ids=db:all:20000 details  > /proc/1/fd/1 2>/proc/1/fd/2
+30 3 8,18,28 * * scrapyd-client schedule -p gepris_crawler --arg context=projekt --arg ids=db:all:20000 details  > /proc/1/fd/1 2>/proc/1/fd/2
+30 3 9,19,29 * * scrapyd-client schedule -p gepris_crawler --arg context=projekt --arg ids=db:all:20000 details  > /proc/1/fd/1 2>/proc/1/fd/2
+30 3 10,20,30 * * scrapyd-client schedule -p gepris_crawler --arg context=person --arg ids=db:all:50000 details  > /proc/1/fd/1 2>/proc/1/fd/2
