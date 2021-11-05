@@ -23,24 +23,27 @@ DATABASE_PORT = os.environ.get('POSTGRES_PORT')
 
 LOG_LEVEL = 'INFO'
 
-# Crawl responsibly by identifying yourself (and your website) on the user-agent
-# USER_AGENT = 'gepris_crawler by Toni Mueller (toni.mueller@student.uni-halle.de)'
-
-# Seems they are slowing me down, try to be more anonymous by using fake useragent
-FAKEUSERAGENT_PROVIDERS = [
-    'scrapy_fake_useragent.providers.FakeUserAgentProvider',  # this is the first provider we'll try
-    'scrapy_fake_useragent.providers.FakerProvider',  # if FakeUserAgentProvider fails, we'll use faker to generate a user-agent string for us
-    'scrapy_fake_useragent.providers.FixedUserAgentProvider',  # fall back to USER_AGENT value
-]
-USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:90.0) Gecko/20100101 Firefox/90.0'
-# USER_AGENT = 'gepris_crawler by Toni Mueller (toni.mueller@student.uni-halle.de)'
-
-DOWNLOADER_MIDDLEWARES = {
-    'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
-    'scrapy.downloadermiddlewares.retry.RetryMiddleware': None,
-    'scrapy_fake_useragent.middleware.RandomUserAgentMiddleware': 400,
-    'scrapy_fake_useragent.middleware.RetryUserAgentMiddleware': 401,
-}
+USER_AGENT = os.environ.get('USER_AGENT')
+# These two have to be initialized in order for the tests to work
+FAKEUSERAGENT_PROVIDERS = None
+DOWNLOADER_MIDDLEWARES = {}
+# if no user agent is set, enable fake useragent
+if USER_AGENT is None:
+    USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:90.0) Gecko/20100101 Firefox/90.0'
+    FAKEUSERAGENT_PROVIDERS = [
+        # this is the first provider we'll try
+        'scrapy_fake_useragent.providers.FakeUserAgentProvider',
+        # if FakeUserAgentProvider fails, we'll use faker to generate a user-agent string for us
+        'scrapy_fake_useragent.providers.FakerProvider',
+        # fall back to USER_AGENT value
+        'scrapy_fake_useragent.providers.FixedUserAgentProvider',
+    ]
+    DOWNLOADER_MIDDLEWARES = {
+        'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
+        'scrapy.downloadermiddlewares.retry.RetryMiddleware': None,
+        'scrapy_fake_useragent.middleware.RandomUserAgentMiddleware': 400,
+        'scrapy_fake_useragent.middleware.RetryUserAgentMiddleware': 401,
+    }
 
 # Parameters for Proxy middleware
 if os.environ.get('WEBSHARE_PROXY_LIST_URL') is not None:
