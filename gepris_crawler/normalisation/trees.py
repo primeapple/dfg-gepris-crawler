@@ -1,5 +1,5 @@
 from ..data_transformations import is_reference, extract_institution_id, get_reference_path, get_reference_children, \
-    get_reference_value, extract_id
+    get_reference_value, extract_id, remove_http_prefix
 from ..gepris_helper import is_gepris_path
 
 ORIGINAL_INST_SUBINSTITUTIONS_KEY = 'untergeordneteInstitutionen'
@@ -9,6 +9,8 @@ NORMALISED_INST_PROJECTS_KEY = 'normalised_projects'
 
 ORIGINAL_PERS_PROJECTS_KEY = 'projekteNachRolle'
 NORMALISED_PERS_PROJECTS_KEY = 'normalised_projects'
+ORIGINAL_PERS_PRICES_KEY = 'preise'
+NORMALISED_PERS_PRICES_KEY = 'normalised_prices'
 
 
 def normalise_sub_institutions(institutions):
@@ -30,6 +32,23 @@ def normalise_sub_institutions(institutions):
             raise ValueError(
                 f'Unexpected subinstitution, should be a reference (path, name, [children])but was {sub_inst} in {institutions}')
     return leaves
+
+
+def normalise_prices(price_categories):
+    normalised_prices = {}
+    for category in price_categories:
+        if is_reference(category) and get_reference_children(category) is not None:
+            prices = []
+            for price in get_reference_children(category):
+                if is_reference(price) and get_reference_children(price) is None:
+                    price['path'] = remove_http_prefix(get_reference_path(price))
+                    prices.append(price)
+                else:
+                    raise ValueError(f'Expected price to be reference without children but was: {price}')
+            normalised_prices[get_reference_value(category)] = prices
+        else:
+            raise ValueError(f'Expect price category to be reference with children but was: {category}')
+    return normalised_prices
 
 
 def normalise_tree_leaves(entries, context_to_keep):
@@ -57,7 +76,6 @@ def normalise_tree_leaves(entries, context_to_keep):
         i += 1
     return leaves
 
-
 def normalise_institution_trees(institution_trees_dict):
     # check if any other trees are in there:
     unexpected_keys = set(institution_trees_dict.keys()) - {ORIGINAL_INST_PROJECTS_KEY,
@@ -81,7 +99,7 @@ def normalise_institution_trees(institution_trees_dict):
 
 def normalise_person_trees(person_trees_dict):
     # check if any other trees are in there:
-    unexpected_keys = set(person_trees_dict.keys()) - {ORIGINAL_PERS_PROJECTS_KEY}
+    unexpected_keys = set(person_trees_dict.keys()) - {ORIGINAL_PERS_PROJECTS_KEY, ORIGINAL_PERS_PRICES_KEY}
     if len(unexpected_keys) > 0:
         raise ValueError(f'There were unexpected trees on the page: {unexpected_keys}')
 
@@ -90,5 +108,10 @@ def normalise_person_trees(person_trees_dict):
     if projects is not None:
         person_trees_dict[NORMALISED_PERS_PROJECTS_KEY] = normalise_tree_leaves(projects, 'projekt')
         del person_trees_dict[ORIGINAL_PERS_PROJECTS_KEY]
+
+    prices = person_trees_dict.get(ORIGINAL_PERS_PRICES_KEY)
+    if prices is not None:
+        person_trees_dict[NORMALISED_PERS_PRICES_KEY] = normalise_prices(prices)
+        del person_trees_dict[ORIGINAL_PERS_PRICES_KEY]
 
     return person_trees_dict

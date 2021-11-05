@@ -107,6 +107,47 @@ class DetailsSpiderTest(unittest.TestCase):
                                                           'details/person_215969423_de_22102021.html')
         self.assertDictEqual(result_dict, item)
 
+    def test_person_with_price_tree(self):
+        item = {
+            'id': 1835696,
+            'name_de': 'Professor Dr. Eric Findlay Bell',
+            'verstorben': False,
+            'gender': 'male',
+            'attributes': {
+                'adresse': 'University of Michigan, Department of Astronomy, 1085 S. University,'
+                           ' Ann Arbor MI 48109-1107, USA',
+                'telefon': '+1 734 764-3408',
+                'telefax': '+1 734 763-6317',
+                'mail': 'ericbell@umich.edu',
+                'internet': 'www.lsa.umich.edu/mira/people/ci.belleric_ci.detail'
+            },
+            'trees': {
+                'normalised_projects': [
+                    {
+                        'Als Antragsteller': [
+                            {
+                                'abgeschlossene Projekte': [
+                                    '5448759',
+                                    '17341944'
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                'normalised_prices': {
+                    'Als Preisträger': [
+                        {
+                            'value': 'Heinz Maier-Leibnitz-Preis 2007',
+                            'path': 'www.dfg.de/gefoerderte_projekte/wissenschaftliche_preise/leibnitz-preis/2007/'
+                        }
+                    ]
+                }
+            }
+        }
+        result_dict = self._test_parse_german_non_projekt('person', 1835696,
+                                                          'details/person_1835696_de_05112021.html')
+        self.assertDictEqual(result_dict, item)
+
     def test_institution(self):
         item = {
             'id': 12957,
