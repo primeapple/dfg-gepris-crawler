@@ -13,8 +13,16 @@ class ItemNotifierPipelineTest(TestCase):
     def tearDown(self):
         self.db.close()
 
-    def mock_spider(self, name, items_scraped):
-        stats = Mock(get_value=Mock(return_value=items_scraped), get_stats=Mock(return_value={}))
+    def mock_spider(self, name, items_scraped, items_moved=None):
+        def get_value_func(key, default_value):
+            if key == 'item_scraped_count':
+                return items_scraped
+            elif key == 'item_moved_count' and items_moved is not None:
+                return items_moved
+            else:
+                return default_value
+
+        stats = Mock(get_value=Mock(side_effect=get_value_func), get_stats=Mock(return_value={}))
         spider = Mock(db=self.db, had_error=False, crawler=Mock(stats=stats))
         spider.name = name
         return spider
@@ -110,7 +118,8 @@ class ItemNotifierPipelineTest(TestCase):
             # assertion
             mock_send.assert_called_once()
             self.assertEqual(mock_send.call_args.args[0],
-                             "Warning - GeprisCrawler - Spider 'search_results' - context 'institution' - 100 (-1) items")
+                             "Warning - GeprisCrawler - Spider 'search_results' - context 'institution' - 100 (-1)"
+                             " items")
 
     def test_search_results_no_mail_equal_institutions_on_last_dm_run(self):
         # setup
@@ -156,6 +165,18 @@ class ItemNotifierPipelineTest(TestCase):
         # setup
         pipeline = self.get_pipeline()
         spider = self.mock_spider('details', 100)
+        spider.ids = [i for i in range(100)]
+        spider.context = 'projekt'
+        with patch('gepris_crawler.pipelines.EmailNotifierPipeline._send') as mock_send:
+            # test
+            pipeline.close_spider(spider)
+            # assertions
+            mock_send.assert_not_called()
+
+    def test_details_no_mail_equal_items_items_as_expected_with_moved(self):
+        # setup
+        pipeline = self.get_pipeline()
+        spider = self.mock_spider('details', 99, items_moved=1)
         spider.ids = [i for i in range(100)]
         spider.context = 'projekt'
         with patch('gepris_crawler.pipelines.EmailNotifierPipeline._send') as mock_send:
