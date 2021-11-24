@@ -28,7 +28,7 @@ USER_AGENT = os.environ.get('USER_AGENT')
 FAKEUSERAGENT_PROVIDERS = None
 DOWNLOADER_MIDDLEWARES = {}
 # if no user agent is set, enable fake useragent
-if USER_AGENT is None:
+if not USER_AGENT:
     USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:90.0) Gecko/20100101 Firefox/90.0'
     FAKEUSERAGENT_PROVIDERS = [
         # this is the first provider we'll try
@@ -46,7 +46,7 @@ if USER_AGENT is None:
     }
 
 # Parameters for Proxy middleware
-if os.environ.get('WEBSHARE_PROXY_LIST_URL') is not None:
+if os.environ.get('WEBSHARE_PROXY_LIST_URL'):
     ROTATING_PROXY_LIST = get_formatted_proxy_list(os.environ.get('WEBSHARE_PROXY_LIST_URL'))
     PROXY_MIDDLEWARES = {
         'rotating_proxies.middlewares.RotatingProxyMiddleware': 610,

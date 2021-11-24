@@ -62,12 +62,12 @@ class EmailNotifierPipeline:
     @classmethod
     def from_crawler(cls, crawler):
         settings = crawler.settings
-        if settings.get('MAIL_RECEIVER') is None \
-                or settings.get('MAIL_FROM') is None \
-                or settings.get('MAIL_USER') is None \
-                or settings.get('MAIL_PASS') is None \
-                or settings.get('MAIL_HOST') is None \
-                or settings.get('MAIL_PORT') is None \
+        if not settings.get('MAIL_RECEIVER') \
+                or not settings.get('MAIL_FROM') \
+                or not settings.get('MAIL_USER') \
+                or not settings.get('MAIL_PASS') \
+                or not settings.get('MAIL_HOST') \
+                or not settings.get('MAIL_PORT') \
                 or settings.getbool('NO_DB'):
             raise NotConfigured
         else:
