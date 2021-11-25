@@ -9,7 +9,7 @@ from scrapy.loader import ItemLoader
 from itemloaders.processors import TakeFirst, Identity, MapCompose, Compose, Join
 from .data_transformations import extract_id, filter_parenthesis, filter_no_abstracts_found, \
     filter_strings, to_list, filter_empty_string, to_datetime, clean_string, is_list_with_single_string, \
-    has_crucifix_prefix, remove_crucifix_suffix, guess_gender_from_title
+    has_crucifix_prefix, remove_crucifix_suffix, guess_gender_from_title, drop_search_result_attribute
 from .normalisation.project_attributes import normalise as nm_project
 from .normalisation.project_result_attributes import normalise as nm_project_result
 from .normalisation.person_attributes import normalise as nm_person
@@ -93,7 +93,7 @@ class BasicLoader(scrapy.loader.ItemLoader):
 class SearchResultLoader(BasicLoader):
     default_item_class = SearchResultItem
     id_in = MapCompose(extract_id, BasicLoader.id_in)
-    project_attributes_in = MapCompose(to_list)
+    project_attributes_in = MapCompose(lambda v: drop_search_result_attribute(v, 'Antragsteller', wrap_in_list=True))
     project_attributes_out = Compose(dict)
     # TODO: normalise the name based on the strings
     name_de_in = MapCompose(clean_string)

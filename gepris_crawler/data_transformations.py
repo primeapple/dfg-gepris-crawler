@@ -132,6 +132,14 @@ def clean_string(string):
     return cleaned_str.strip()
 
 
+def drop_search_result_attribute(value_list, attribute_key, wrap_in_list=True):
+    if value_list[0] != attribute_key:
+        if wrap_in_list:
+            return to_list(value_list)
+        else:
+            return value_list
+
+
 # for debugging purposes
 def do_nothing(value):
     return value
