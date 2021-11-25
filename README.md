@@ -170,7 +170,7 @@ You will now be using the webshare proxies
 
 # TODOs:
 * If a page p1 as moved, we should then mark all the pages that reference p1 as "Update needed"
-  * This should only be done for person (gets referenced by projekt) and institutions (referenced by projekt and institution)
+  * This should only be done ~~for person (gets referenced by projekt)~~ and institutions (referenced by projekt and institution)
 * A good strategy would be to every day only crawl N Projects. For each project we crawl it's references to person and institution
   * Make N so that we will average around a fixed amount of total requests
   * What is with subinstitutions?

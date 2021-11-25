@@ -8,6 +8,7 @@ from test.resources import responses, get_settings
 
 
 class SearchResultsSpiderTest(unittest.TestCase):
+    maxDiff = None
 
     def test_projekt(self):
         first_item = {
@@ -21,6 +22,22 @@ class SearchResultsSpiderTest(unittest.TestCase):
             }
         }
         self._test_parse('projekt', 'search_results/projekt_10_5_21102021.html', 5, first_item)
+
+    def test_projekt_with_antragsteller_attribute(self):
+        item = {
+            'id': 5076748,
+            'name_de': 'Hochauflösende mm-Beobachtungen massereicher Protosterne',
+            'project_attributes': {
+                'DFG-Verfahren': 'Schwerpunktprogramme',
+                'Fachliche Zuordnung': 'Astrophysik und Astronomie',
+                'Förderung': '1997 bis 2002',
+                'Teilprojekt zu': {
+                    'path': "/gepris/projekt/5458045",
+                    'value': "SPP 471"
+                }
+            }
+        }
+        self._test_parse('projekt', 'search_results/projekt_0_1_25112021.html', 1, item)
 
     def test_person(self):
         first_item = {

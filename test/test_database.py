@@ -87,8 +87,30 @@ class DatabaseTest(TestCase):
         results = self.db.execute_sql(Query.from_(items).select(items.star).where(items.id.eq(2)).get_sql(), fetch=True)
         self.assertListEqual(results, [(2, 'projekt', 5, 5, dict(item), 4, False)])
 
-    def test_create_references_from_details_run(self):
-        self.fail()
+    def test_create_personen_references_from_details_run(self):
+        # set up
+        self.db.execute_sql(Query.into('spider_runs')
+                            .insert(0, 'search_results', 'projekt', datetime.now(), datetime.now(), 1)
+                            .insert(1, 'details', 'projekt', datetime.now(), datetime.now(), 1)
+                            .get_sql()
+                            )
+        spider = Mock(context='projekt', run_id=0)
+        spider.name = 'search_results'
+        self.db.upsert_available_item(100, SearchResultItem(id=100, name_de='test'), spider)
+        self.db.insert_detail_item(100, ProjectItem(id=100, attributes={'antragsteller_personen': [200]}),
+                                   Mock(context='projekt', run_id=1), 'success')
+
+        # test
+        self.db.create_personen_references_from_details_run(Mock(run_id=1))
+
+        # assertion
+        available_items = Table('available_items')
+        created_person = self.db.execute_sql(Query.from_(available_items)
+                                             .select(available_items.star)
+                                             .where(available_items.id.eq(200))
+                                             .get_sql(),
+                                             fetch=True)[0]
+        self.assertEqual((200, 'person', None, None, None, None, True), created_person)
 
     def test_mark_not_found_available_items(self):
         # set up
@@ -110,6 +132,43 @@ class DatabaseTest(TestCase):
         self.db.mark_not_found_available_items(spider)
         results = self.db.execute_sql(Query.from_(items).select(items.star).get_sql(), fetch=True)
         self.assertListEqual(results, [(1, 'projekt', 1, 2, None, None, True)])
+
+    def test_mark_detail_check_needed_for_moved_items(self):
+        # set up
+        self.db.execute_sql(Query.into('spider_runs')
+                            .insert(0, 'search_results', 'projekt', datetime.now(), datetime.now(), 1)
+                            .insert(1, 'details', 'projekt', datetime.now(), datetime.now(), 1)
+                            .insert(2, 'search_results', 'institution', datetime.now(), datetime.now(), 1)
+                            .insert(3, 'details', 'institution', datetime.now(), datetime.now(), 0)
+                            .get_sql()
+                            )
+        # inserting test project to available items
+        spider = Mock(context='projekt', run_id=0)
+        spider.name = 'search_results'
+        self.db.upsert_available_item(100, SearchResultItem(id=100, name_de='test'), spider)
+        # adding details run for test project
+        spider.name = 'details'
+        spider.run_id = 1
+        self.db.upsert_available_item(100, None, spider)
+        self.db.insert_detail_item(100, ProjectItem(id=100, attributes={'unternehmen_institutionen': [200]}),
+                                   Mock(context='projekt', run_id=1), 'success')
+        # adding moved run for other project, that is referenced by test project
+        spider.context = 'institution'
+        spider.run_id = 2
+        self.db.upsert_available_item(200, None, spider)
+        self.db.insert_detail_item(200, None, Mock(context='institution', run_id=3), 'moved')
+
+        # test
+        self.db.mark_detail_check_needed_for_moved_items(Mock(context='institution', run_id=3))
+
+        # assertions
+        available_items = Table('available_items')
+        detail_check_needed = self.db.execute_sql(Query.from_(available_items)
+                                                  .select(available_items.detail_check_needed)
+                                                  .where(available_items.id.eq(100))
+                                                  .get_sql(),
+                                                  fetch=True)[0][0]
+        self.assertEqual(detail_check_needed, True)
 
     def test_insert_data_monitor_run(self):
         dm = Table('data_monitor')
@@ -172,4 +231,3 @@ class DatabaseTest(TestCase):
         latest_version = self.db.get_latest_dm_stat('gepris_version')
         # assert
         self.assertEqual(latest_version, None)
-

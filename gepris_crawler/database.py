@@ -1,8 +1,8 @@
 import psycopg2
 from psycopg2.extras import Json
 from pypika import PostgreSQLQuery, Table
-from pypika.functions import CurTimestamp
-from pypika.terms import ExistsCriterion
+from pypika.functions import CurTimestamp, Cast
+from pypika.terms import ExistsCriterion, PseudoColumn, CustomFunction, Field
 
 
 class PostgresDatabase:
@@ -76,21 +76,22 @@ class PostgresDatabase:
             self.execute_sql(upsert_item)
         elif spider.name == 'search_results':
             # doesn't seem to work with pypika yet because of missing distinct from
+            # TODO: this should work with pypika.CustomFunction...
             upsert_item = "INSERT INTO available_items AS items" \
-                  " (id, context, last_available_seen, last_available_change," \
-                  " last_available_item, detail_check_needed)" \
-                  " VALUES(%s, %s, %s, %s, %s, True) ON CONFLICT (id, context) DO UPDATE" \
-                  " SET last_available_seen = EXCLUDED.last_available_seen," \
-                  " last_available_change = CASE " \
-                  " WHEN items.last_available_item IS DISTINCT FROM EXCLUDED.last_available_item" \
-                  " THEN EXCLUDED.last_available_change" \
-                  " ELSE items.last_available_change END," \
-                  " last_available_item = EXCLUDED.last_available_item," \
-                  " detail_check_needed = CASE " \
-                  " WHEN items.last_available_item IS DISTINCT FROM EXCLUDED.last_available_item" \
-                  " AND items.last_available_seen IS NOT NULL" \
-                  " THEN True" \
-                  " ELSE items.detail_check_needed END"
+                          " (id, context, last_available_seen, last_available_change," \
+                          " last_available_item, detail_check_needed)" \
+                          " VALUES(%s, %s, %s, %s, %s, True) ON CONFLICT (id, context) DO UPDATE" \
+                          " SET last_available_seen = EXCLUDED.last_available_seen," \
+                          " last_available_change = CASE " \
+                          " WHEN items.last_available_item IS DISTINCT FROM EXCLUDED.last_available_item" \
+                          " THEN EXCLUDED.last_available_change" \
+                          " ELSE items.last_available_change END," \
+                          " last_available_item = EXCLUDED.last_available_item," \
+                          " detail_check_needed = CASE " \
+                          " WHEN items.last_available_item IS DISTINCT FROM EXCLUDED.last_available_item" \
+                          " AND items.last_available_seen IS NOT NULL" \
+                          " THEN True" \
+                          " ELSE items.detail_check_needed END"
             sql_params = (item_id, spider.context, spider.run_id, spider.run_id, Json(dict(search_result_item)))
             self.execute_sql(upsert_item, params=sql_params)
         else:
@@ -109,16 +110,37 @@ class PostgresDatabase:
               " WHERE NOT EXISTS (SELECT * FROM latest_detail_items WHERE id = %s AND context = %s" \
               " AND status = %s AND item IS NOT DISTINCT FROM %s)"
         sql_params = (
-        item_id, spider.context, spider.run_id, json_item, status, item_id, spider.context, status, json_item)
+            item_id, spider.context, spider.run_id, json_item, status, item_id, spider.context, status, json_item)
         with self.connection.cursor() as cursor:
             cursor.execute(sql, sql_params)
         self.connection.commit()
 
-    def create_references_from_details_run(self, spider):
-        sql = "SELECT create_non_existing_personen_references_from_details(%s)"
-        sql_params = (spider.run_id,)
+    def create_personen_references_from_details_run(self, spider):
+        available_items = Table('available_items')
+        details_items_history = Table('details_items_history')
+        person_attributes = PostgreSQLQuery \
+            .select(PseudoColumn(f'UNNEST(enum_range(NULL::PERSON_PROJEKT_BEZIEHUNG_TYPE))::TEXT AS name')) \
+            .as_('attrs')
+        JsonbGet = CustomFunction('jsonb_object_field', ['json', 'key'])
+        JsonbExist = CustomFunction('jsonb_exists', ['json', 'key'])
+
+        q = PostgreSQLQuery.into(available_items).columns('id', 'context', 'detail_check_needed').insert() \
+            .select(PseudoColumn("jsonb_array_elements_text(item->'attributes'->(name))::INT as id"),
+                    Cast('person', 'CONTEXT_TYPE'),
+                    True) \
+            .distinct() \
+            .from_(details_items_history) \
+            .join(person_attributes) \
+            .on(JsonbExist(JsonbGet(details_items_history.item, 'attributes'), person_attributes.name)) \
+            .where(details_items_history.context.eq('projekt')) \
+            .where(details_items_history.created_at.eq(spider.run_id)) \
+            .where(~ details_items_history.id.isin(PostgreSQLQuery.select(available_items.id) \
+                                                   .from_(available_items) \
+                                                   .where(available_items.context.eq('person'))
+                                                   ))
+
         with self.connection.cursor() as cursor:
-            cursor.execute(sql, sql_params)
+            cursor.execute(q.get_sql())
         self.connection.commit()
 
     def mark_not_found_available_items(self, spider):
@@ -133,6 +155,31 @@ class PostgresDatabase:
             .where(items.last_available_seen.ne(spider.run_id)) \
             .where(items.last_available_seen.notnull()) \
             .where(items.last_available_item.notnull())
+        self.execute_sql(q.get_sql())
+
+    def mark_detail_check_needed_for_moved_items(self, spider):
+        if spider.context == 'person':
+            references = Table('latest_person_projekt_references')
+            referenced_field = Field('person_id', table=references)
+        elif spider.context == 'institution':
+            references = Table('latest_institution_projekt_references')
+            referenced_field = Field('institution_id', table=references)
+        else:
+            raise AttributeError(f"Context has to be either 'person' or 'institution', but was '{spider.context}'")
+        details_items_history = Table('details_items_history')
+        moved_items = PostgreSQLQuery.select(details_items_history.id) \
+            .from_(details_items_history) \
+            .where(details_items_history.created_at.eq(spider.run_id))
+
+        projects_with_moved_references = PostgreSQLQuery.select(references.projekt_id) \
+            .from_(references) \
+            .join(moved_items) \
+            .on(moved_items.id.eq(referenced_field))
+
+        available_items = Table('available_items')
+        q = PostgreSQLQuery.update(available_items) \
+            .set(available_items.detail_check_needed, True) \
+            .where(available_items.id.isin(projects_with_moved_references))
         self.execute_sql(q.get_sql())
 
     def insert_data_monitor_run(self, item):

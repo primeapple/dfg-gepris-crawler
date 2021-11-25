@@ -62,15 +62,53 @@ SELECT i.id, i.context,
 FROM latest_detail_items i JOIN available_items a ON (i.id = a.id AND i.context = a.context)
 WHERE i.status != 'moved';
 
-CREATE FUNCTION create_non_existing_personen_references_from_details(detail_run INTEGER) RETURNS VOID LANGUAGE PLPGSQL AS $$
-    BEGIN
-        INSERT INTO available_items (id, context, detail_check_needed)
-        SELECT DISTINCT jsonb_array_elements_text(item->'attributes'->(attr_name))::INT as id, 'person'::CONTEXT_TYPE, TRUE
-        FROM details_items_history CROSS JOIN
-            (SELECT UNNEST(enum_range(NULL::PERSON_PROJEKT_BEZIEHUNG_TYPE))::TEXT AS attr_name) person_ref_attributes
-        WHERE context = 'projekt' AND created_at = detail_run
-        EXCEPT SELECT id, 'person'::CONTEXT_TYPE, TRUE FROM available_items WHERE CONTEXT = 'person';
-    END $$;
+CREATE TYPE PERSON_PROJEKT_BEZIEHUNG_TYPE AS ENUM (
+    'antragsteller_personen',
+    'auslaendische_antragsteller_personen',
+    'ehemalige_antragsteller_personen',
+    'mit_antragsteller_personen',
+    'sprecher_personen',
+    'auslaendische_sprecher_personen',
+    'co_sprecher_personen',
+    'leiter_personen',
+    'stellvertreter_personen',
+    'teilprojekt_leiter_personen',
+    'gastgeber_personen',
+    'kooperationspartner_personen',
+    'beteiligte_personen',
+    'beteiligte_wissenschaftler_personen',
+    'mit_verantwortliche_personen'
+);
+
+CREATE TYPE INSTITUTION_PROJEKT_BEZIEHUNG_TYPE AS ENUM (
+    'antragstellende_institutionen',
+    'mit_antragstellende_institutionen',
+    'beteiligte_institutionen',
+    'beteiligte_einrichtungen_institutionen',
+    'beteiligte_hochschule_institutionen',
+    'partner_institutionen',
+    'partner_organisation_institutionen',
+    'unternehmen_institutionen',
+    'auslaendische_institutionen'
+);
+
+CREATE VIEW latest_person_projekt_references AS
+SELECT jsonb_array_elements_text(item->'attributes'->attr_name::TEXT)::INT AS person_id,
+id AS projekt_id,
+attr_name::PERSON_PROJEKT_BEZIEHUNG_TYPE AS reference_type
+FROM latest_detail_items JOIN
+(SELECT UNNEST(enum_range(NULL::PERSON_PROJEKT_BEZIEHUNG_TYPE))::TEXT AS attr_name) attrs
+ON (jsonb_exists(item->'attributes', attr_name))
+WHERE context='projekt';
+
+CREATE VIEW latest_institution_projekt_references AS
+SELECT jsonb_array_elements_text(item->'attributes'->attr_name::TEXT)::INT AS institution_id,
+id AS projekt_id,
+attr_name::INSTITUTION_PROJEKT_BEZIEHUNG_TYPE AS reference_type
+FROM latest_detail_items l JOIN
+(SELECT UNNEST(enum_range(NULL::INSTITUTION_PROJEKT_BEZIEHUNG_TYPE))::TEXT AS attr_name) attrs
+ON (jsonb_exists(l.item->'attributes', attrs.attr_name))
+WHERE context='projekt';
 
 CREATE TABLE data_monitor
 (
@@ -98,6 +136,7 @@ current_index_date TIMESTAMP WITH TIME ZONE NOT NULL
 
 CREATE TYPE PERSON_GENDER_TYPE AS ENUM ('male', 'female', 'unknown');
 
+-- TODO: create materialized views for this
 CREATE TABLE personen (
   id INTEGER PRIMARY KEY,
   name TEXT NOT NULL,
@@ -144,36 +183,6 @@ CREATE TABLE projekte (
   ergebnis_erstellungsjahr INTEGER,
   -- foreign keys
   teil_projekt_zu INTEGER REFERENCES projekte(id)
-);
-
-CREATE TYPE PERSON_PROJEKT_BEZIEHUNG_TYPE AS ENUM (
-    'antragsteller_personen',
-    'auslaendische_antragsteller_personen',
-    'ehemalige_antragsteller_personen',
-    'mit_antragsteller_personen',
-    'sprecher_personen',
-    'auslaendische_sprecher_personen',
-    'co_sprecher_personen',
-    'leiter_personen',
-    'stellvertreter_personen',
-    'teilprojekt_leiter_personen',
-    'gastgeber_personen',
-    'kooperationspartner_personen',
-    'beteiligte_personen',
-    'beteiligte_wissenschaftler_personen',
-    'mit_verantwortliche_personen'
-);
-
-CREATE TYPE INSTITUTION_PROJEKT_BEZIEHUNG_TYPE AS ENUM (
-    'antragstellende_institutionen',
-    'mit_antragstellende_institutionen',
-    'beteiligte_institutionen',
-    'beteiligte_einrichtungen_institutionen',
-    'beteiligte_hochschule_institutionen',
-    'partner_institutionen',
-    'partner_organisation_institutionen',
-    'unternehmen_institutionen',
-    'auslaendische_institutionen'
 );
 
 CREATE TABLE institutionen_projekte (
@@ -297,7 +306,6 @@ CREATE FUNCTION create_projekte_from_items() RETURNS VOID LANGUAGE PLPGSQL AS $$
             WHERE context = 'projekt';
     END $$;
 
--- TODO: the following is untested, test it
 CREATE FUNCTION create_institutionen_projekte_references() RETURNS VOID LANGUAGE PLPGSQL AS $$
     DECLARE
         attribute text;
