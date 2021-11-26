@@ -90,18 +90,22 @@ class DatabaseTest(TestCase):
     def test_create_personen_references_from_details_run(self):
         # set up
         self.db.execute_sql(Query.into('spider_runs')
-                            .insert(0, 'search_results', 'projekt', datetime.now(), datetime.now(), 1)
-                            .insert(1, 'details', 'projekt', datetime.now(), datetime.now(), 1)
+                            .insert(1, 'search_results', 'projekt', datetime.now(), datetime.now(), 1)
+                            .insert(2, 'search_results', 'person', datetime.now(), datetime.now(), 1)
+                            .insert(3, 'details', 'projekt', datetime.now(), datetime.now(), 1)
                             .get_sql()
                             )
-        spider = Mock(context='projekt', run_id=0)
+        spider = Mock(context='projekt', run_id=1)
         spider.name = 'search_results'
         self.db.upsert_available_item(100, SearchResultItem(id=100, name_de='test'), spider)
-        self.db.insert_detail_item(100, ProjectItem(id=100, attributes={'antragsteller_personen': [200]}),
-                                   Mock(context='projekt', run_id=1), 'success')
+        spider.run_id = 2
+        spider.context = 'person'
+        self.db.upsert_available_item(201, SearchResultItem(id=201, name_de='test'), spider)
+        self.db.insert_detail_item(100, ProjectItem(id=100, attributes={'antragsteller_personen': [200, 201]}),
+                                   Mock(context='projekt', run_id=3), 'success')
 
         # test
-        self.db.create_personen_references_from_details_run(Mock(run_id=1))
+        self.db.create_personen_references_from_details_run(Mock(run_id=3))
 
         # assertion
         available_items = Table('available_items')
@@ -109,8 +113,15 @@ class DatabaseTest(TestCase):
                                              .select(available_items.star)
                                              .where(available_items.id.eq(200))
                                              .get_sql(),
-                                             fetch=True)[0]
-        self.assertEqual((200, 'person', None, None, None, None, True), created_person)
+                                             fetch=True)
+        self.assertEqual([(200, 'person', None, None, None, None, True)], created_person)
+
+        not_created_person = self.db.execute_sql(Query.from_(available_items)
+                                                 .select(available_items.star)
+                                                 .where(available_items.id.eq(201))
+                                                 .get_sql(),
+                                                 fetch=True)
+        self.assertEqual([(201, 'person', 2, 2, {'id': 201, 'name_de': 'test'}, None, True)], not_created_person)
 
     def test_mark_not_found_available_items(self):
         # set up
@@ -133,42 +144,56 @@ class DatabaseTest(TestCase):
         results = self.db.execute_sql(Query.from_(items).select(items.star).get_sql(), fetch=True)
         self.assertListEqual(results, [(1, 'projekt', 1, 2, None, None, True)])
 
-    def test_mark_detail_check_needed_for_moved_items(self):
+    def test_mark_detail_check_needed_on_projekts_for_moved_person_institution(self):
         # set up
         self.db.execute_sql(Query.into('spider_runs')
-                            .insert(0, 'search_results', 'projekt', datetime.now(), datetime.now(), 1)
-                            .insert(1, 'details', 'projekt', datetime.now(), datetime.now(), 1)
-                            .insert(2, 'search_results', 'institution', datetime.now(), datetime.now(), 1)
-                            .insert(3, 'details', 'institution', datetime.now(), datetime.now(), 0)
+                            .insert(1, 'search_results', 'projekt', datetime.now(), datetime.now(), 2)
+                            .insert(2, 'details', 'projekt', datetime.now(), datetime.now(), 2)
+                            .insert(3, 'search_results', 'institution', datetime.now(), datetime.now(), 2)
+                            .insert(4, 'details', 'institution', datetime.now(), datetime.now(), 1)
                             .get_sql()
                             )
-        # inserting test project to available items
-        spider = Mock(context='projekt', run_id=0)
-        spider.name = 'search_results'
-        self.db.upsert_available_item(100, SearchResultItem(id=100, name_de='test'), spider)
-        # adding details run for test project
-        spider.name = 'details'
-        spider.run_id = 1
-        self.db.upsert_available_item(100, None, spider)
-        self.db.insert_detail_item(100, ProjectItem(id=100, attributes={'unternehmen_institutionen': [200]}),
-                                   Mock(context='projekt', run_id=1), 'success')
-        # adding moved run for other project, that is referenced by test project
-        spider.context = 'institution'
-        spider.run_id = 2
-        self.db.upsert_available_item(200, None, spider)
-        self.db.insert_detail_item(200, None, Mock(context='institution', run_id=3), 'moved')
+        self.db.execute_sql(Query.into('available_items')
+                            .insert(100, 'projekt', 1, 1, Json({'name_de': 'p100'}), None, False)
+                            .insert(101, 'projekt', 1, 1, Json({'name_de': 'p100'}), None, False)
+                            .get_sql()
+                            )
+        self.db.execute_sql(Query.into('details_items_history')
+                            .insert(100, 'projekt', 2, Json({'attributes': {'unternehmen_institutionen': [200]}}),
+                                    'success')
+                            .insert(101, 'projekt', 2, Json({'attributes': {'unternehmen_institutionen': [201]}}),
+                                    'success')
+                            .get_sql()
+                            )
+        self.db.execute_sql(Query.into('available_items')
+                            .insert(200, 'institution', 3, 3, Json({'name_de': 'i200'}), None, False)
+                            .insert(201, 'institution', 3, 3, Json({'name_de': 'i201'}), None, False)
+                            .get_sql()
+                            )
+        self.db.execute_sql(Query.into('details_items_history')
+                            .insert(200, 'institution', 4, None, 'moved')
+                            .insert(201, 'institution', 4, Json({'name_de': 'i201'}), 'success')
+                            .get_sql()
+                            )
 
         # test
-        self.db.mark_detail_check_needed_for_moved_items(Mock(context='institution', run_id=3))
+        self.db.mark_detail_check_needed_on_projekts_for_moved_person_institution(Mock(context='institution', run_id=4))
 
         # assertions
         available_items = Table('available_items')
-        detail_check_needed = self.db.execute_sql(Query.from_(available_items)
-                                                  .select(available_items.detail_check_needed)
-                                                  .where(available_items.id.eq(100))
-                                                  .get_sql(),
-                                                  fetch=True)[0][0]
-        self.assertEqual(detail_check_needed, True)
+        p100_available_items_detail_check = self.db.execute_sql(Query.from_(available_items)
+                                                                .select(available_items.detail_check_needed)
+                                                                .where(available_items.id.eq(100))
+                                                                .get_sql(),
+                                                                fetch=True)[0][0]
+        self.assertEqual(p100_available_items_detail_check, True)
+
+        p101_available_items_detail_check = self.db.execute_sql(Query.from_(available_items)
+                                                                .select(available_items.detail_check_needed)
+                                                                .where(available_items.id.eq(101))
+                                                                .get_sql(),
+                                                                fetch=True)[0][0]
+        self.assertEqual(p101_available_items_detail_check, False)
 
     def test_insert_data_monitor_run(self):
         dm = Table('data_monitor')

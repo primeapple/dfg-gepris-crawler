@@ -124,20 +124,23 @@ class PostgresDatabase:
         JsonbGet = CustomFunction('jsonb_object_field', ['json', 'key'])
         JsonbExist = CustomFunction('jsonb_exists', ['json', 'key'])
 
-        q = PostgreSQLQuery.into(available_items).columns('id', 'context', 'detail_check_needed').insert() \
-            .select(PseudoColumn("jsonb_array_elements_text(item->'attributes'->(name))::INT as id"),
-                    Cast('person', 'CONTEXT_TYPE'),
-                    True) \
+        not_yet_existing_persons = PostgreSQLQuery.select(
+            PseudoColumn("jsonb_array_elements_text(item->'attributes'->(name))::INT as id"),
+            Cast('person', 'CONTEXT_TYPE'),
+            True) \
             .distinct() \
             .from_(details_items_history) \
             .join(person_attributes) \
             .on(JsonbExist(JsonbGet(details_items_history.item, 'attributes'), person_attributes.name)) \
             .where(details_items_history.context.eq('projekt')) \
             .where(details_items_history.created_at.eq(spider.run_id)) \
-            .where(~ details_items_history.id.isin(PostgreSQLQuery.select(available_items.id) \
-                                                   .from_(available_items) \
-                                                   .where(available_items.context.eq('person'))
-                                                   ))
+            .except_of(PostgreSQLQuery.select(available_items.id, Cast('person', 'CONTEXT_TYPE'), True) \
+                       .from_(available_items) \
+                       .where(available_items.context.eq('person'))
+                       )
+
+        q = PostgreSQLQuery.into(available_items).columns('id', 'context', 'detail_check_needed') \
+            .insert().select(not_yet_existing_persons.star).from_(not_yet_existing_persons)
 
         with self.connection.cursor() as cursor:
             cursor.execute(q.get_sql())
@@ -157,7 +160,7 @@ class PostgresDatabase:
             .where(items.last_available_item.notnull())
         self.execute_sql(q.get_sql())
 
-    def mark_detail_check_needed_for_moved_items(self, spider):
+    def mark_detail_check_needed_on_projekts_for_moved_person_institution(self, spider):
         if spider.context == 'person':
             references = Table('latest_person_projekt_references')
             referenced_field = Field('person_id', table=references)
@@ -169,7 +172,8 @@ class PostgresDatabase:
         details_items_history = Table('details_items_history')
         moved_items = PostgreSQLQuery.select(details_items_history.id) \
             .from_(details_items_history) \
-            .where(details_items_history.created_at.eq(spider.run_id))
+            .where(details_items_history.created_at.eq(spider.run_id)) \
+            .where(details_items_history.status.eq('moved'))
 
         projects_with_moved_references = PostgreSQLQuery.select(references.projekt_id) \
             .from_(references) \

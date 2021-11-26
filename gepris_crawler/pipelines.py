@@ -36,7 +36,7 @@ class DatabaseInsertionPipeline:
             if spider.context == 'projekt':
                 spider.db.create_references_from_details_run(spider)
             else:
-                spider.db.mark_detail_check_needed_for_moved_items(spider)
+                spider.db.mark_detail_check_needed_on_projekts_for_moved_person_institution(spider)
         elif spider.name == 'search_results':
             spider.db.update_run_result(spider.run_id, self.scraped_items)
             spider.db.mark_not_found_available_items(spider)
