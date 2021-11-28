@@ -15,6 +15,7 @@ test.json
 __pycache__/
 project.egg-info/
 build/
+*.pyc
 
 # private stuff
 notes
