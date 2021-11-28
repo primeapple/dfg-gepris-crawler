@@ -93,7 +93,11 @@ class BasicLoader(scrapy.loader.ItemLoader):
 class SearchResultLoader(BasicLoader):
     default_item_class = SearchResultItem
     id_in = MapCompose(extract_id, BasicLoader.id_in)
-    project_attributes_in = MapCompose(lambda v: drop_search_result_attribute(v, 'Antragsteller', wrap_in_list=True))
+    project_attributes_in = MapCompose(lambda v: drop_search_result_attribute(v, 'Antragsteller', wrap_in_list=True),
+                                       lambda v: drop_search_result_attribute(v, 'Antragstellerin', wrap_in_list=True),
+                                       lambda v: drop_search_result_attribute(v, 'Antragstellerinnen', wrap_in_list=True),
+                                       lambda v: drop_search_result_attribute(v, 'Antragstellerinnen / Antragsteller',
+                                                                              wrap_in_list=True))
     project_attributes_out = Compose(dict)
     # TODO: normalise the name based on the strings
     name_de_in = MapCompose(clean_string)

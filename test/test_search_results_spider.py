@@ -39,6 +39,18 @@ class SearchResultsSpiderTest(unittest.TestCase):
         }
         self._test_parse('projekt', 'search_results/projekt_0_1_25112021.html', 1, item)
 
+    def test_projekt_with_antragsteller_innen_attribute(self):
+        item = {
+            'id': 447999811,
+            'name_de': 'Experimentelle und numerische Untersuchungen zu den Gründungen von Offshore-Windenergieanlagen in weichem marinem Taiwanesischem Ton unter kombinierter hochzyklischer und seismischer Belastung',
+            'project_attributes': {
+                'DFG-Verfahren': 'Sachbeihilfen',
+                'Fachliche Zuordnung': 'Geotechnik, Wasserbau',
+                'Förderung': 'Seit 2021'
+            }
+        }
+        self._test_parse('projekt', 'search_results/projekt_0_1_28112021.html', 1, item)
+
     def test_person(self):
         first_item = {
             'id': 5132,

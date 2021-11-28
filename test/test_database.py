@@ -155,7 +155,7 @@ class DatabaseTest(TestCase):
                             )
         self.db.execute_sql(Query.into('available_items')
                             .insert(100, 'projekt', 1, 1, Json({'name_de': 'p100'}), None, False)
-                            .insert(101, 'projekt', 1, 1, Json({'name_de': 'p100'}), None, False)
+                            .insert(101, 'projekt', 1, 1, Json({'name_de': 'p101'}), None, False)
                             .get_sql()
                             )
         self.db.execute_sql(Query.into('details_items_history')
