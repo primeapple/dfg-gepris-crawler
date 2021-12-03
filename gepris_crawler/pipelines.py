@@ -16,10 +16,6 @@ class DatabaseInsertionPipeline:
     This Pipeline currently only works for a crawler with only one spider at a time
     """
 
-    def __init__(self):
-        # TODO: this can be removed, the number of scraped items can be taken from the stats, see mail logger pipeline
-        self.scraped_items = 0
-
     @classmethod
     def from_crawler(cls, crawler):
         if crawler.settings.getbool('NO_DB'):
@@ -31,15 +27,21 @@ class DatabaseInsertionPipeline:
         pass
 
     def close_spider(self, spider):
+        if spider.name == 'data_monitor':
+            return
+
+        spider.logger.info(f'Finishing run {spider.run_id} of {spider.name}, doing last database operations')
+        scraped_items = spider.crawler.stats.get_value('item_scraped_count', 0)
         if spider.name == 'details':
-            spider.db.update_run_result(spider.run_id, self.scraped_items)
+            spider.db.update_run_result(spider.run_id, scraped_items)
             if spider.context == 'projekt':
                 spider.db.create_personen_references_from_details_run(spider)
             else:
                 spider.db.mark_detail_check_needed_on_projekts_for_moved_person_institution(spider)
         elif spider.name == 'search_results':
-            spider.db.update_run_result(spider.run_id, self.scraped_items)
+            spider.db.update_run_result(spider.run_id, scraped_items)
             spider.db.mark_not_found_available_items(spider)
+        spider.logger.info('Database operations done')
 
     def process_item(self, item, spider):
         if spider.name == 'search_results':
@@ -49,7 +51,6 @@ class DatabaseInsertionPipeline:
             spider.db.insert_detail_item(item['id'], item, spider, 'success')
         elif spider.name == 'data_monitor':
             spider.db.insert_data_monitor_run(item)
-        self.scraped_items += 1
         return item
 
 

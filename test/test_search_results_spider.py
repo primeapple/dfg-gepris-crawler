@@ -11,7 +11,7 @@ class SearchResultsSpiderTest(unittest.TestCase):
     maxDiff = None
 
     def test_projekt(self):
-        first_item = {
+        expected_item = {
             'id': 269379,
             'name_de': 'GRK 60: Molekularbiologische Analyse pathophysiologischer Prozesse',
             'project_attributes': {
@@ -21,10 +21,11 @@ class SearchResultsSpiderTest(unittest.TestCase):
                 'Sprecher': 'Eberhard Günther'
             }
         }
-        self._test_parse('projekt', 'search_results/projekt_10_5_21102021.html', 5, first_item)
+        items = self._test_parse('projekt', 'search_results/projekt_10_5_21102021.html', 5)
+        self.assertDictEqual(dict(items[0]), expected_item)
 
     def test_projekt_with_antragsteller_attribute(self):
-        item = {
+        expected_item = {
             'id': 5076748,
             'name_de': 'Hochauflösende mm-Beobachtungen massereicher Protosterne',
             'project_attributes': {
@@ -37,10 +38,11 @@ class SearchResultsSpiderTest(unittest.TestCase):
                 }
             }
         }
-        self._test_parse('projekt', 'search_results/projekt_0_1_25112021.html', 1, item)
+        items = self._test_parse('projekt', 'search_results/projekt_0_1_25112021.html', 1)
+        self.assertDictEqual(dict(items[0]), expected_item)
 
     def test_projekt_with_antragsteller_innen_attribute(self):
-        item = {
+        expected_item = {
             'id': 447999811,
             'name_de': 'Experimentelle und numerische Untersuchungen zu den Gründungen von Offshore-Windenergieanlagen in weichem marinem Taiwanesischem Ton unter kombinierter hochzyklischer und seismischer Belastung',
             'project_attributes': {
@@ -49,10 +51,15 @@ class SearchResultsSpiderTest(unittest.TestCase):
                 'Förderung': 'Seit 2021'
             }
         }
-        self._test_parse('projekt', 'search_results/projekt_0_1_28112021.html', 1, item)
+        items = self._test_parse('projekt', 'search_results/projekt_0_1_28112021.html', 1)
+        self.assertDictEqual(dict(items[0]), expected_item)
+
+    def test_projekt_with_empty_item(self):
+        items = self._test_parse('projekt', 'search_results/projekt_131490_5_03122021.html', 5, check_items_count=False)
+        self.assertEqual(len(items), 4)
 
     def test_person(self):
-        first_item = {
+        expected_item = {
             'id': 5132,
             'name_de': 'Abromeit, Heidrun',
             'addresse': [
@@ -61,10 +68,11 @@ class SearchResultsSpiderTest(unittest.TestCase):
                 'Institut für Politikwissenschaft'
             ]
         }
-        self._test_parse('person', 'search_results/person_0_1_21102021.html', 1, first_item)
+        items = self._test_parse('person', 'search_results/person_0_1_21102021.html', 1)
+        self.assertDictEqual(dict(items[0]), expected_item)
 
     def test_institution(self):
-        first_item = {
+        expected_item = {
             'id': 28761,
             'name_de': 'Professur für Personalpolitik',
             'addresse': ['Hamburg', 'Deutschland'],
@@ -73,8 +81,11 @@ class SearchResultsSpiderTest(unittest.TestCase):
                 'name_de': 'Helmut-Schmidt-Universität'
             }
         }
-        self._test_parse('institution', 'search_results/institution_9290_10_21102021.html', 10, first_item)
-        fifth_item = {
+        items = self._test_parse('institution', 'search_results/institution_9290_10_21102021.html', 10)
+        self.assertDictEqual(dict(items[0]), expected_item)
+
+    def test_another_institution(self):
+        expected_item = {
             'id': 28768,
             'name_de': 'Lehrstuhl für Strafrecht, Strafprozeßrecht, Rechtsphilosophie und Rechtssoziologie',
             'addresse': ['Frankfurt am Main', 'Deutschland'],
@@ -83,15 +94,16 @@ class SearchResultsSpiderTest(unittest.TestCase):
                 'name_de': 'Goethe-Universität Frankfurt am Main'
             }
         }
-        self._test_parse('institution', 'search_results/institution_9290_10_21102021.html', 10, fifth_item, expected_item_index=4)
+        items = self._test_parse('institution', 'search_results/institution_9290_10_21102021.html', 10)
+        self.assertDictEqual(dict(items[4]), expected_item)
 
-    def _test_parse(self, context, file, items_per_page, expected_item, expected_item_index=0):
+    def _test_parse(self, context, file, items_per_page, check_items_count=True):
         spider = SearchResultsSpider(context=context, items=items_per_page, settings=get_settings(database=False))
         result = spider.parse(responses.fake_response_from_file(file), items_per_page)
         self.assertIsInstance(result, types.GeneratorType)
         items = [i for i in result]
-        self.assertEqual(len(items), items_per_page)
+        if check_items_count:
+            self.assertEqual(len(items), items_per_page)
         for item in items:
             self.assertIsInstance(item, scrapy.Item)
-        item = items[expected_item_index]
-        self.assertDictEqual(dict(item), expected_item)
+        return items

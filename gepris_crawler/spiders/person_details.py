@@ -64,5 +64,5 @@ class PersonDetailsSpider(BaseSpider):
 
     def google_cache_request_failed(self, failure):
         element_id = failure.request.cb_kwargs["element_id"]
-        self.logger.warn(f'Request to google failed for id {element_id}')
+        self.logger.warning(f'Request to google failed for id {element_id}')
         yield self.gepris_request(element_id)

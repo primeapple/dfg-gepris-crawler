@@ -42,20 +42,24 @@ class SearchResultsSpider(BaseSpider):
         # iterate over all results on page
         loaded_items = 0
         for result in results_on_page:
-            loader = SearchResultLoader(selector=result)
-            loader.add_xpath('id', './/h2/a/@href')
-            loader.add_xpath('name_de', './/h2/a/text()')
+            result_link = result.xpath('.//h2/a')
+            if result_link.attrib['href'] == f"/gepris/{self.context}/null":
+                self.logger.warning(f"Found unexpected search_result without id: {result.get()}")
+            else:
+                loader = SearchResultLoader(selector=result)
+                loader.add_xpath('id', './/h2/a/@href')
+                loader.add_xpath('name_de', './/h2/a/text()')
 
-            for item in self.context_load_function(loader, result):
-                loaded_items += 1
-                item_id = item['id']
-                if item_id in self.seen_ids:
-                    self.logger.warn(f'Found ID {item_id} second time on page: {response.url}')
-                else:
-                    self.seen_ids.add(item_id)
-                yield item
+                for item in self.context_load_function(loader, result):
+                    loaded_items += 1
+                    item_id = item['id']
+                    if item_id in self.seen_ids:
+                        self.logger.warning(f'Found ID {item_id} second time on page: {response.url}')
+                    else:
+                        self.seen_ids.add(item_id)
+                    yield item
         if loaded_items != items_on_page:
-            self.logger.warn(
+            self.logger.warning(
                 f'Expected {items_on_page} items on page but loaded {loaded_items} on url {response.url}')
 
     def set_total_items(self, response):

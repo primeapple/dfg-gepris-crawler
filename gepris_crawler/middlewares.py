@@ -30,7 +30,7 @@ class ExceptionHandlerMiddleware:
                 reason='Unexpected Field found'
             )
         elif isinstance(exception, PageDoesNotExistAnymoreError):
-            spider.logger.warn(f'{exception} - Marking it as moved in the database')
+            spider.logger.warning(f'{exception} - Marking it as moved in the database')
             spider.crawler.stats.inc_value('item_moved_count')
             if self._insert_details_error(spider):
                 spider.db.upsert_available_item(response.cb_kwargs['element_id'], None, spider)
