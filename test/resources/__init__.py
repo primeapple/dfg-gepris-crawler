@@ -5,6 +5,7 @@ from datetime import datetime
 from pytz import timezone
 
 from scrapy.utils.project import get_project_settings
+from scrapy.utils.log import configure_logging
 
 from gepris_crawler.database import PostgresDatabase
 from gepris_crawler.items import DataMonitorItem
@@ -38,6 +39,8 @@ def get_settings(database=False, mail=False):
         settings.set('MAIL_PORT', 123)
     else:
         settings.set('MAIL_RECEIVER', None)
+    settings.set('LOG_ENABLED', False)
+    configure_logging(settings=settings)
     return settings
 
 

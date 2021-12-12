@@ -71,6 +71,13 @@ class DetailsSpiderTest(unittest.TestCase):
         expected_item['beschreibung_en'] = expected_item['beschreibung_de']
         self.assertEqual(dict(item), expected_item)
 
+    def test_project_with_mitverantwortliche(self):
+        request = self._test_parse_german_projekt('projekt', 491343583, 'details/projekt_491343583_de_12122021.html')
+        item = request.cb_kwargs['project_item']
+        self.assertIsInstance(item, scrapy.Item)
+        self.assertCountEqual([134389277, 1395277], item['attributes']['female_personen'])
+        self.assertEqual([1395277], item['attributes']['mit_verantwortliche_personen'])
+
     def test_projekt_with_result(self):
         self.fail()
 

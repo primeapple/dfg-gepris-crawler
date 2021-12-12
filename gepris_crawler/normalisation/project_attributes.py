@@ -158,8 +158,9 @@ PROJEKT_ATTRIBUTES_MAP = {
     'Mitantragstellerin': MIT_ANTRAGSTELLER_PERSONEN,
     'Mitantragstellerinnen': MIT_ANTRAGSTELLER_PERSONEN,
     'Mitantragstellerinnen / Mitantragsteller': MIT_ANTRAGSTELLER_PERSONEN,
+    'Mitverantwortlich': MIT_VERANTWORTLICHE_PERSONEN,
+    'Mitverantwortlich(e)': MIT_VERANTWORTLICHE_PERSONEN,
     'Mitverantwortliche': MIT_VERANTWORTLICHE_PERSONEN,
-    'Mitverantwortlicher': MIT_VERANTWORTLICHE_PERSONEN,
     'Partnerorganisation': PARTNER_ORGANISATION_INSTITUTIONEN,
     'Projektkennung': PROJEKT_KENNUNG,
     'Sprecher': SPRECHER_PERSONEN,
@@ -202,7 +203,6 @@ PROJEKT_ATTRIBUTES_MAP = {
 # Gender types
 UNKNOWN = 'unknown'
 FEMALE = 'female'
-FEMALE_IF_ONLY_ONE = 'female_if_only_one'
 MALE = 'male'
 
 PROJEKT_PERSON_GENDER_MAP = {
@@ -237,8 +237,9 @@ PROJEKT_PERSON_GENDER_MAP = {
     'Mitantragstellerin': FEMALE,
     'Mitantragstellerinnen': FEMALE,
     'Mitantragstellerinnen / Mitantragsteller': UNKNOWN,
-    'Mitverantwortliche': FEMALE_IF_ONLY_ONE,
-    'Mitverantwortlicher': MALE,
+    'Mitverantwortlich': MALE,
+    'Mitverantwortlich(e)': FEMALE,
+    'Mitverantwortliche': UNKNOWN,
     'Sprecher': MALE,
     'Sprecherin': FEMALE,
     'Sprecherinnen': FEMALE,
@@ -341,12 +342,10 @@ class ProjectAttributesLoader(scrapy.loader.ItemLoader):
     foerderung_ende_out = TakeFirst()
 
 
-def _parse_for_gender(normalised_value_list, original_key):
+def _parse_for_gender(original_key):
     if PROJEKT_PERSON_GENDER_MAP[original_key] == MALE:
         return MALE
     elif PROJEKT_PERSON_GENDER_MAP[original_key] == FEMALE:
-        return FEMALE
-    elif PROJEKT_PERSON_GENDER_MAP[original_key] == FEMALE_IF_ONLY_ONE and len(normalised_value_list) == 1:
         return FEMALE
     elif PROJEKT_PERSON_GENDER_MAP[original_key] == UNKNOWN:
         return UNKNOWN
@@ -354,8 +353,8 @@ def _parse_for_gender(normalised_value_list, original_key):
 
 def normalise(unstructured_attributes_dict):
     item = normalise_attributes(unstructured_attributes_dict, ProjectAttributesLoader(),
-                                     keys_to_process=KEYS_TO_PROCESS, keys_to_remove=KEYS_TO_REMOVE,
-                                     attributes_map=PROJEKT_ATTRIBUTES_MAP)
+                                keys_to_process=KEYS_TO_PROCESS, keys_to_remove=KEYS_TO_REMOVE,
+                                attributes_map=PROJEKT_ATTRIBUTES_MAP)
     # the following adds male and female keys for persons which gender can be guessed by the person references keys
     male_personen = set()
     female_personen = set()
@@ -367,12 +366,12 @@ def normalise(unstructured_attributes_dict):
             # should never happen
             if normalised_key in seen_personen_keys:
                 raise ValueError(
-                    f'Normalised Key "{normalised_key}" for gepris key "{key}" exists multiples times in projekt attributes {item_hash}')
+                    f'Normalised Key "{normalised_key}" for gepris key "{key}" exists multiples times in projekt attributes {unstructured_attributes_dict}')
             else:
                 seen_personen_keys.append(normalised_key)
-            if _parse_for_gender(item[normalised_key], key) == MALE:
+            if _parse_for_gender(key) == MALE:
                 male_personen.update(item[normalised_key])
-            elif _parse_for_gender(item[normalised_key], key) == FEMALE:
+            elif _parse_for_gender(key) == FEMALE:
                 female_personen.update(item[normalised_key])
     item['male_personen'] = list(male_personen)
     item['female_personen'] = list(female_personen)
