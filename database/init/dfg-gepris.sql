@@ -146,6 +146,7 @@ CREATE TABLE personen (
   internet TEXT,
   telefax TEXT,
   telefon TEXT,
+  orcid_id TEXT,
   verstorben BOOLEAN,
   gender PERSON_GENDER_TYPE
 );
@@ -202,7 +203,7 @@ CREATE TABLE personen_projekte (
 
 CREATE FUNCTION create_personen_from_items() RETURNS VOID LANGUAGE PLPGSQL AS $$
     BEGIN
-        INSERT INTO personen (id, name, adresse, mail, internet, telefax, telefon, verstorben, gender)
+        INSERT INTO personen (id, name, adresse, mail, internet, telefax, telefon, orcid_id, verstorben, gender)
             SELECT id,
                 item->>'name_de',
                 item->'attributes'->>'adresse',
@@ -210,6 +211,7 @@ CREATE FUNCTION create_personen_from_items() RETURNS VOID LANGUAGE PLPGSQL AS $$
                 item->'attributes'->>'internet',
                 item->'attributes'->>'telefax',
                 item->'attributes'->>'telefon',
+                item->'attributes'->>'orcid_id',
                 (item->>'verstorben')::BOOLEAN,
                 (item->>'gender')::PERSON_GENDER_TYPE
             FROM latest_items

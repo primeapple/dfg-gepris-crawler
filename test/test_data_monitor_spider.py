@@ -46,3 +46,4 @@ class DataMonitorSpiderTest(unittest.TestCase):
         self.assertIsInstance(result, scrapy.Item)
         self.assertEqual(result['finished_project_count'], 35552)
         self.assertEqual(result['research_infrastructure_count'], 340)
+        self.assertNotIn('infrastructure_count', result)

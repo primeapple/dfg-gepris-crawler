@@ -2,21 +2,23 @@ import scrapy
 from scrapy.loader import ItemLoader
 from itemloaders.processors import TakeFirst, MapCompose, Join, Compose
 from .normalisation import normalise_attributes
-from ..data_transformations import filter_no_address_found, transform, get_reference_path, remove_http_prefix,\
-    is_list_with_single_string
+from ..data_transformations import filter_no_address_found, transform, get_reference_path, remove_http_prefix, \
+    is_list_with_single_string, get_reference_value
 
 ADRESSE = 'adresse'
 MAIL = 'mail'
 INTERNET = 'internet'
 TELEFAX = 'telefax'
 TELEFON = 'telefon'
+ORCID_ID = 'orcid_id'
 
 PERSON_ATTRIBUTES_MAP = {
     'Adresse': ADRESSE,
     'E-Mail': MAIL,
     'Internet': INTERNET,
     'Telefax': TELEFAX,
-    'Telefon': TELEFON
+    'Telefon': TELEFON,
+    'ORCID-ID': ORCID_ID
 }
 
 
@@ -26,6 +28,7 @@ class PersonAttributes(scrapy.Item):
     internet = scrapy.Field()
     telefax = scrapy.Field()
     telefon = scrapy.Field()
+    orcid_id = scrapy.Field()
 
 
 class PersonAttributesLoader(scrapy.loader.ItemLoader):
@@ -37,6 +40,7 @@ class PersonAttributesLoader(scrapy.loader.ItemLoader):
     mail_out = Join('@')
     # do we really want to remove http and https?
     internet_in = MapCompose(lambda v: transform(v, get_reference_path, only_on_types=[dict]), remove_http_prefix)
+    orcid_id_in = MapCompose(get_reference_value)
 
 
 def normalise(unstructured_attributes_dict):

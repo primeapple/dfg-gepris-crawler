@@ -148,6 +148,12 @@ class DetailsSpiderTest(unittest.TestCase):
                                                           'details/person_1835696_de_05112021.html')
         self.assertDictEqual(result_dict, item)
 
+    def test_person_with_orcid_id(self):
+        result_dict = self._test_parse_german_non_projekt('person', 470035085,
+                                                          'details/person_470035085_de_12122021.html')
+        self.assertIn('orcid_id', result_dict['attributes'])
+        self.assertEqual('0000-0001-8538-0038', result_dict['attributes']['orcid_id'])
+
     def test_institution(self):
         item = {
             'id': 12957,
