@@ -9,14 +9,20 @@ CONTEXTS = ['projekt', 'person', 'institution']
 LANGUAGES = ['de', 'en']
 DATA_MONITOR_KEYS = {
     'Projekte mit Abschlussberichten': 'finished_project_count',
+    'Projekte f�r die Abschlussberichtsdaten in GEPRIS vorliegen': 'finished_project_count',
+    'Projekte für die Abschlussberichtsdaten in GEPRIS vorliegen': 'finished_project_count',
     'Projekt': 'project_count',
+    'Projekte': 'project_count',
     'Person': 'person_count',
+    'Personen': 'person_count',
     'Institution': 'institution_count',
+    'Institutionen': 'institution_count',
     'Geistes- und Sozialwissenschaften': 'humanities_count',
     'Lebenswissenschaften': 'life_count',
     'Naturwissenschaften': 'natural_count',
     'Ingenieurwissenschaften': 'engineering_count',
-    'Infrastrukturförderung': 'infrastructure_count'
+    'Infrastrukturförderung': 'infrastructure_count',
+    'Forschungsinfrastruktur': 'research_infrastructure_count'
 }
 GOOGLE_CACHE_BASE_URL = 'https://webcache.googleusercontent.com/search?q=cache:'
 

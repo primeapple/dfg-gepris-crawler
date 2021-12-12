@@ -75,6 +75,7 @@ class DataMonitorItem(scrapy.Item):
     natural_count = scrapy.Field()
     engineering_count = scrapy.Field()
     infrastructure_count = scrapy.Field()
+    research_infrastructure_count = scrapy.Field()
     # meta informations
     gepris_version = scrapy.Field()
     current_index_version = scrapy.Field()

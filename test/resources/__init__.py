@@ -61,6 +61,7 @@ def get_sample_dm_item(version='18.5.6', project=136387, person=87700, instituti
                            natural_count=35151,
                            engineering_count=25475,
                            infrastructure_count=11066,
+                           research_infrastructure_count=303,
                            gepris_version=version,
                            current_index_version='dd5213f6-d21e-4177-960f-0450db3fb750',
                            current_index_date=timezone('Europe/Berlin').localize(datetime(2021, 10, 19, 7, 47, 33)))
