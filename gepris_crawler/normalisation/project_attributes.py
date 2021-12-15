@@ -29,6 +29,8 @@ BETEILIGTE_PERSONEN = 'beteiligte_personen'
 BETEILIGTE_WISSENSCHAFTLER_PERSONEN = 'beteiligte_wissenschaftler_personen'
 ### Mitverantwortliche
 MIT_VERANTWORTLICHE_PERSONEN = 'mit_verantwortliche_personen'
+### IGK Partner (Sprecher)
+IGK_PERSONEN = 'igk_personen'
 
 ## List of all personen References
 PERSONEN_REFERENCES = [
@@ -46,7 +48,8 @@ PERSONEN_REFERENCES = [
     KOOPERATIONSPARTNER_PERSONEN,
     BETEILIGTE_PERSONEN,
     BETEILIGTE_WISSENSCHAFTLER_PERSONEN,
-    MIT_VERANTWORTLICHE_PERSONEN
+    MIT_VERANTWORTLICHE_PERSONEN,
+    IGK_PERSONEN
 ]
 
 # Institutionen References Keys
@@ -65,6 +68,8 @@ PARTNER_ORGANISATION_INSTITUTIONEN = 'partner_organisation_institutionen'
 UNTERNEHMEN_INSTITUTIONEN = 'unternehmen_institutionen'
 ### Auslaendische
 AUSLAENDISCHE_INSTITUTIONEN = 'auslaendische_institutionen'
+### IGK Partner
+IGK_INSTITUTIONEN = 'igk_institutionen'
 
 ## List of all institutionen References
 INSTITUTIONEN_REFERENCES = [
@@ -76,7 +81,8 @@ INSTITUTIONEN_REFERENCES = [
     ANWENDUNGS_PARTNER_INSTITUTIONEN,
     PARTNER_ORGANISATION_INSTITUTIONEN,
     UNTERNEHMEN_INSTITUTIONEN,
-    AUSLAENDISCHE_INSTITUTIONEN
+    AUSLAENDISCHE_INSTITUTIONEN,
+    IGK_INSTITUTIONEN
 ]
 
 # Other Project Attributes:
@@ -197,7 +203,10 @@ PROJEKT_ATTRIBUTES_MAP = {
     'beteiligte Wissenschaftlerinnen / beteiligte Wissenschaftler': BETEILIGTE_WISSENSCHAFTLER_PERSONEN,
     'beteiligter Wissenschaftler': BETEILIGTE_WISSENSCHAFTLER_PERSONEN,
     'fachliche DFG-Ansprechpartnerin': DFG_ANSPRECHPARTNER,
-    'fachlicher DFG-Ansprechpartner': DFG_ANSPRECHPARTNER
+    'fachlicher DFG-Ansprechpartner': DFG_ANSPRECHPARTNER,
+    'Sprecher (IGK-Partner)': IGK_PERSONEN,
+    'Sprecherin (IGK-Partner)': IGK_PERSONEN,
+    'IGK-Partnerinstitution': IGK_INSTITUTIONEN,
 }
 
 # Gender types
@@ -269,6 +278,8 @@ PROJEKT_PERSON_GENDER_MAP = {
     'beteiligte Wissenschaftlerinnen': FEMALE,
     'beteiligte Wissenschaftlerinnen / beteiligte Wissenschaftler': UNKNOWN,
     'beteiligter Wissenschaftler': MALE,
+    'Sprecher (IGK-Partner)': MALE,
+    'Sprecherin (IGK-Partner)': FEMALE,
 }
 
 

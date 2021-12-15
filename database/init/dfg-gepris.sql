@@ -77,7 +77,8 @@ CREATE TYPE PERSON_PROJEKT_BEZIEHUNG_TYPE AS ENUM (
     'kooperationspartner_personen',
     'beteiligte_personen',
     'beteiligte_wissenschaftler_personen',
-    'mit_verantwortliche_personen'
+    'mit_verantwortliche_personen',
+    'igk_personen'
 );
 
 CREATE TYPE INSTITUTION_PROJEKT_BEZIEHUNG_TYPE AS ENUM (
@@ -89,7 +90,8 @@ CREATE TYPE INSTITUTION_PROJEKT_BEZIEHUNG_TYPE AS ENUM (
     'partner_institutionen',
     'partner_organisation_institutionen',
     'unternehmen_institutionen',
-    'auslaendische_institutionen'
+    'auslaendische_institutionen',
+    'igk_institutionen'
 );
 
 CREATE VIEW latest_person_projekt_references AS

@@ -78,6 +78,15 @@ class DetailsSpiderTest(unittest.TestCase):
         self.assertCountEqual([134389277, 1395277], item['attributes']['female_personen'])
         self.assertEqual([1395277], item['attributes']['mit_verantwortliche_personen'])
 
+    def test_projekt_with_igk_attributes(self):
+        request = self._test_parse_german_projekt('projekt', 317513741, 'details/projekt_317513741_de_15122021.html')
+        item = request.cb_kwargs['project_item']
+        self.assertIsInstance(item, scrapy.Item)
+        attributes = item['attributes']
+        self.assertCountEqual([35982322, 20753636, 361115666], attributes['igk_institutionen'])
+        self.assertEqual([242325003], attributes['igk_personen'])
+        self.assertIn(242325003, attributes['female_personen'])
+
     def test_projekt_with_result(self):
         self.fail()
 
