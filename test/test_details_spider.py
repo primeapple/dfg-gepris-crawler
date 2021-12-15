@@ -87,6 +87,13 @@ class DetailsSpiderTest(unittest.TestCase):
         self.assertEqual([242325003], attributes['igk_personen'])
         self.assertIn(242325003, attributes['female_personen'])
 
+    def test_projekt_with_attribute_without_key(self):
+        request = self._test_parse_german_projekt('projekt', 443011404, 'details/projekt_443011404_de_15122021.html')
+        item = request.cb_kwargs['project_item']
+        self.assertIsInstance(item, scrapy.Item)
+        # just to make sure the attribute is not added
+        self.assertEqual(7, len(item['attributes']))
+
     def test_projekt_with_result(self):
         self.fail()
 
@@ -231,7 +238,9 @@ class DetailsSpiderTest(unittest.TestCase):
         if request is None:
             result = spider.parse_german(response, element_id)
             self.assertIsInstance(result, scrapy.Request)
+            # current lang is de
             self.assertEqual(response.meta['expected_language'], 'de')
+            # next lang is en
             self.assertEqual(result.meta['expected_language'], 'en')
         else:
             result = spider.parse_english_project(response, response.cb_kwargs['project_item'])

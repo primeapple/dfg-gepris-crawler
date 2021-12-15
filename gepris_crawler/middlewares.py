@@ -46,14 +46,17 @@ class ExceptionHandlerMiddleware:
                 spider.logger.error(f'{exception} - Unknown DetailsPageStructure')
                 spider.db.upsert_available_item(response.cb_kwargs['element_id'], None, spider)
                 spider.db.insert_detail_item(response.cb_kwargs['element_id'], None, spider, 'error')
+        # throw other errors immediately
         else:
+            spider.had_error = True
             return None
-        # retry the request
+        # retry the request if limit is not reached yet
         if new_request_or_none is not None:
             return [new_request_or_none]
-        # do not process the request further (usually after 3 retries)
+        # throw error
         else:
-            return []
+            spider.had_error = True
+            return None
 
     def _insert_details_error(self, spider):
         return not spider.settings.getbool('NO_DB') and spider.name == 'details'

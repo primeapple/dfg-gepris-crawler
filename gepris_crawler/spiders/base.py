@@ -91,7 +91,11 @@ class BaseSpider(scrapy.Spider, ABC):
                     self.logger.warning(
                         f'We expect an element with class "nameX" directly before an element with class "valueX" but "X" was different: {last_key.get()}, {span.get()}')
                 else:
-                    attributes.append([self.non_empty_text(last_key), self.extract_text_and_links(span)])
+                    last_key_text = self.non_empty_text(last_key, err_none=False)
+                    if last_key_text is None:
+                        self.logger.warn(f'There was an key element without any text for value element on url: {self.sel_url(span)}')
+                    else:
+                        attributes.append([last_key_text, self.extract_text_and_links(span)])
                     last_key = None
             # this is something unexpected
             else:
