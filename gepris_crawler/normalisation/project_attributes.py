@@ -16,6 +16,7 @@ MIT_ANTRAGSTELLER_PERSONEN = 'mit_antragsteller_personen'
 SPRECHER_PERSONEN = 'sprecher_personen'
 AUSLAENDISCHE_SPRECHER_PERSONEN = 'auslaendische_sprecher_personen'
 CO_SPRECHER_PERSONEN = 'co_sprecher_personen'
+STELLVERTRETER_SPRECHER_PERSONEN = 'stellvertreter_sprecher_personen'
 ### Leiter
 LEITER_PERSONEN = 'leiter_personen'
 STELLVERTRETER_PERSONEN = 'stellvertreter_personen'
@@ -49,7 +50,8 @@ PERSONEN_REFERENCES = [
     BETEILIGTE_PERSONEN,
     BETEILIGTE_WISSENSCHAFTLER_PERSONEN,
     MIT_VERANTWORTLICHE_PERSONEN,
-    IGK_PERSONEN
+    IGK_PERSONEN,
+    STELLVERTRETER_SPRECHER_PERSONEN
 ]
 
 # Institutionen References Keys
@@ -206,7 +208,11 @@ PROJEKT_ATTRIBUTES_MAP = {
     'fachlicher DFG-Ansprechpartner': DFG_ANSPRECHPARTNER,
     'Sprecher (IGK-Partner)': IGK_PERSONEN,
     'Sprecherin (IGK-Partner)': IGK_PERSONEN,
+    'Sprecherinnen (IGK-Partner)': IGK_PERSONEN,
+    'Sprecherinnen (IGK-Partner) / Sprecher (IGK-Partner)': IGK_PERSONEN,
     'IGK-Partnerinstitution': IGK_INSTITUTIONEN,
+    'stellvertr. Sprecher': STELLVERTRETER_SPRECHER_PERSONEN,
+    'stellvertr. Sprecherin': STELLVERTRETER_SPRECHER_PERSONEN,
 }
 
 # Gender types
@@ -280,6 +286,10 @@ PROJEKT_PERSON_GENDER_MAP = {
     'beteiligter Wissenschaftler': MALE,
     'Sprecher (IGK-Partner)': MALE,
     'Sprecherin (IGK-Partner)': FEMALE,
+    'Sprecherinnen (IGK-Partner)': FEMALE,
+    'Sprecherinnen (IGK-Partner) / Sprecher (IGK-Partner)': UNKNOWN,
+    'stellvertr. Sprecher': MALE,
+    'stellvertr. Sprecherin': FEMALE,
 }
 
 

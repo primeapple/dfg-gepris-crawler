@@ -78,7 +78,8 @@ CREATE TYPE PERSON_PROJEKT_BEZIEHUNG_TYPE AS ENUM (
     'beteiligte_personen',
     'beteiligte_wissenschaftler_personen',
     'mit_verantwortliche_personen',
-    'igk_personen'
+    'igk_personen',
+    'stellvertreter_sprecher_personen'
 );
 
 CREATE TYPE INSTITUTION_PROJEKT_BEZIEHUNG_TYPE AS ENUM (
