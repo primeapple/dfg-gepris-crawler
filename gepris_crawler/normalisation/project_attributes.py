@@ -213,6 +213,8 @@ PROJEKT_ATTRIBUTES_MAP = {
     'IGK-Partnerinstitution': IGK_INSTITUTIONEN,
     'stellvertr. Sprecher': STELLVERTRETER_SPRECHER_PERSONEN,
     'stellvertr. Sprecherin': STELLVERTRETER_SPRECHER_PERSONEN,
+    'stellvertr. Sprecherinnen': STELLVERTRETER_SPRECHER_PERSONEN,
+    'stellvertr. Sprecherinnen / stellvertr. Sprecher': STELLVERTRETER_SPRECHER_PERSONEN,
 }
 
 # Gender types
@@ -290,6 +292,8 @@ PROJEKT_PERSON_GENDER_MAP = {
     'Sprecherinnen (IGK-Partner) / Sprecher (IGK-Partner)': UNKNOWN,
     'stellvertr. Sprecher': MALE,
     'stellvertr. Sprecherin': FEMALE,
+    'stellvertr. Sprecherinnen': FEMALE,
+    'stellvertr. Sprecherinnen / stellvertr. Sprecher': UNKNOWN,
 }
 
 
