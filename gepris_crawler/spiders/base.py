@@ -48,9 +48,11 @@ class BaseSpider(scrapy.Spider, ABC):
           <span class="value">value2</span>,
           <span class="name">key3</span>,
           <span class="name">key4</span>,
-          <span class="name">value4</span>,
+          <span class="value">value4</span>,
           <span class="name2">value5</span>,
-          <span class="name2">value5</span>]
+          <span class="value">value5</span>,
+          <span class="name"></span>,
+          <span class="value">value6</span>]
         to list like:
          [["key1", "value1"],
           ["key2", "value2"],

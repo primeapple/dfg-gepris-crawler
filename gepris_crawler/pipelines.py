@@ -87,7 +87,8 @@ class EmailNotifierPipeline:
 
     def close_spider(self, spider):
         scraped_items = spider.crawler.stats.get_value('item_scraped_count', 0) + \
-                        spider.crawler.stats.get_value('item_moved_count', 0)
+                        spider.crawler.stats.get_value('item_moved_count', 0) + \
+                        spider.crawler.stats.get_value('item_unexpected_structure_count', 0)
         expected_items = self._get_expected_items(spider)
         if spider.had_error:
             subject = self._build_subject(spider, 'Error', scraped_items, expected_items)

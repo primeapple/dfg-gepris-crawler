@@ -3,7 +3,6 @@
 # See documentation in:
 # https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
-from scrapy import signals
 from scrapy.downloadermiddlewares.retry import get_retry_request
 from scrapy.exceptions import NotConfigured
 from scrapy.utils.httpobj import urlparse_cached
@@ -44,6 +43,7 @@ class ExceptionHandlerMiddleware:
             )
             if new_request_or_none is None and self._insert_details_error(spider):
                 spider.logger.error(f'{exception} - Unknown DetailsPageStructure')
+                spider.crawler.stats.inc_value('item_unexpected_structure_count')
                 spider.db.upsert_available_item(response.cb_kwargs['element_id'], None, spider)
                 spider.db.insert_detail_item(response.cb_kwargs['element_id'], None, spider, 'error')
         # throw other errors immediately
@@ -74,7 +74,8 @@ class DetailsPageExpectedStructureCheckMiddleware:
     def process_spider_input(self, response, spider):
         # just trying to get something that should always be there
         context_title = response.css('*.h2-context-title::text').get()
-        if context_title is None:
+        dfg_abbreviation = response.css('[title="Deutsche Forschungsgemeinschaft"]::text').get()
+        if context_title is None or dfg_abbreviation != 'DFG':
             raise UnexpectedDetailsPageStructure(f'Details Page {response.url} has an unexpected structure')
         else:
             return None
