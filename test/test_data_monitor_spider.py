@@ -14,6 +14,11 @@ class DataMonitorSpiderTest(unittest.TestCase):
     def setUp(self):
         self.spider = DataMonitorSpider(settings=get_settings(database=False))
 
+    def test_request(self):
+        requests = [r for r in self.spider.start_requests()]
+        self.assertEqual(len(requests), 1)
+        self.assertEqual(requests[0].url, 'https://gepris.dfg.de/gepris/OCTOPUS?task=showMonitor')
+
     def test_data_monitor(self):
         result = self.spider.parse(fake_response_from_file('data_monitor/21102021.html'))
         self.assertIsInstance(result, scrapy.Item)

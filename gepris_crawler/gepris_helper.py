@@ -1,7 +1,7 @@
 import scrapy
 
 BASE_URL = 'https://gepris.dfg.de/gepris'
-SEARCH_URL = BASE_URL + '/OCTOPUS'
+OCTOPUS_URL = BASE_URL + '/OCTOPUS'
 SEARCH_TASK = 'doSearchExtended'
 DATA_MONITOR_TASK = 'showMonitor'
 # different contexts to search for
@@ -45,12 +45,22 @@ def google_cache_url(actual_url):
     return GOOGLE_CACHE_BASE_URL + actual_url
 
 
+def data_monitor_request():
+    return scrapy.FormRequest(
+        OCTOPUS_URL,
+        method='GET',
+        formdata=dict(task=DATA_MONITOR_TASK),
+        dont_filter=True,
+        meta=dict(expected_language='de')
+    )
+
+
 def search_results_request(context, results_per_site, current_index, expected_items_on_page):
     # It is important to use dont_filter=True,
     # because the first request is redirected to itself, which makes scrapy filter this second request
     # see: https://stackoverflow.com/questions/59705305/scrapy-thinks-redirects-are-duplicate-requests
     return scrapy.FormRequest(
-        SEARCH_URL,
+        OCTOPUS_URL,
         method='GET',
         formdata=search_list_params(context=context, results_per_site=results_per_site, index=current_index),
         dont_filter=True,
@@ -77,10 +87,6 @@ def details_url(element_id, context):
     if context not in CONTEXTS:
         raise ValueError(f'Context must be one of {CONTEXTS}, but was "{context}"')
     return '/'.join([BASE_URL, context, str(element_id)])
-
-
-def data_monitor_url():
-    return build_url(SEARCH_URL, params={'task': DATA_MONITOR_TASK})
 
 
 def build_url(base, params={}):

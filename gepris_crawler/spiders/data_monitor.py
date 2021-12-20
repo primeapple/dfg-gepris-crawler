@@ -1,4 +1,4 @@
-from ..gepris_helper import data_monitor_url, DATA_MONITOR_KEYS
+from ..gepris_helper import DATA_MONITOR_KEYS, data_monitor_request
 from ..items import DataMonitorLoader
 from .base import BaseSpider
 
@@ -6,10 +6,12 @@ from .base import BaseSpider
 class DataMonitorSpider(BaseSpider):
     name = 'data_monitor'
     allowed_domains = ['gepris.dfg.de']
-    start_urls = [data_monitor_url()]
 
     def __init__(self, *args, **kwargs):
         super(DataMonitorSpider, self).__init__(*args, **kwargs)
+
+    def start_requests(self):
+        yield data_monitor_request()
 
     def parse(self, response):
         loader = DataMonitorLoader()

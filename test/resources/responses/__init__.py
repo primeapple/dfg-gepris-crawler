@@ -36,7 +36,7 @@ def fake_response_from_file(file_name, request=None):
 def generate_request(file_path):
     spider_name, file_name = file_path.split('/')[-2:]
     if spider_name == 'data_monitor':
-        return Request(url=gepris_helper.data_monitor_url())
+        return gepris_helper.data_monitor_request()
     elif spider_name == 'search_results':
         file_name_without_type = file_name.split('.')[0]
         context, index, items_per_page, date = file_name_without_type.split('_')
