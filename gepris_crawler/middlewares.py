@@ -34,6 +34,7 @@ class ExceptionHandlerMiddleware:
             if self._insert_details_error(spider):
                 spider.db.upsert_available_item(response.cb_kwargs['element_id'], None, spider)
                 spider.db.insert_detail_item(response.cb_kwargs['element_id'], None, spider, 'moved')
+            # this does quietly discard the further processing
             return []
         elif isinstance(exception, UnexpectedDetailsPageStructure):
             new_request_or_none = get_retry_request(
@@ -41,11 +42,14 @@ class ExceptionHandlerMiddleware:
                 spider=spider,
                 reason='Unexpected DetailsPageStructure'
             )
-            if new_request_or_none is None and self._insert_details_error(spider):
-                spider.logger.error(f'{exception} - Unknown DetailsPageStructure')
+            if new_request_or_none is None:
+                spider.logger.error(f'{exception}')
                 spider.crawler.stats.inc_value('item_unexpected_structure_count')
-                spider.db.upsert_available_item(response.cb_kwargs['element_id'], None, spider)
-                spider.db.insert_detail_item(response.cb_kwargs['element_id'], None, spider, 'error')
+                spider.had_error = True
+                if self._insert_details_error(spider):
+                    spider.db.upsert_available_item(response.cb_kwargs['element_id'], None, spider)
+                    spider.db.insert_detail_item(response.cb_kwargs['element_id'], None, spider, 'error')
+                return []
         # throw other errors immediately
         else:
             spider.had_error = True

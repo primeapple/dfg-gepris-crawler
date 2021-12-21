@@ -87,8 +87,7 @@ class EmailNotifierPipeline:
 
     def close_spider(self, spider):
         scraped_items = spider.crawler.stats.get_value('item_scraped_count', 0) + \
-                        spider.crawler.stats.get_value('item_moved_count', 0) + \
-                        spider.crawler.stats.get_value('item_unexpected_structure_count', 0)
+                        spider.crawler.stats.get_value('item_moved_count', 0)
         expected_items = self._get_expected_items(spider)
         if spider.had_error:
             subject = self._build_subject(spider, 'Error', scraped_items, expected_items)
@@ -130,11 +129,7 @@ class EmailNotifierPipeline:
                 items = spider.db.get_latest_dm_stat('project_count')
                 if items is not None:
                     return items
-            elif spider.context == 'institution':
-                items = spider.db.get_latest_dm_stat('institution_count')
-                if items is not None:
-                    return items
-            # either persons that are bugged (not all entities can be found in search_results spider)
+            # either persons or institutions that are bugged (not all entities can be found in search_results spider)
             # or there is no dm run yet
             return spider.total_items
         elif spider.name == 'details':
