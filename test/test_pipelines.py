@@ -1,4 +1,4 @@
-from unittest import TestCase
+from unittest import TestCase, skip
 from unittest.mock import Mock, patch
 from gepris_crawler.pipelines import EmailNotifierPipeline
 from test.resources import get_settings, get_test_database, get_sample_dm_item
@@ -121,6 +121,7 @@ class ItemNotifierPipelineTest(TestCase):
                              "Warning - GeprisCrawler - Spider 'search_results' - context 'institution' - 100 (-1)"
                              " items")
 
+    @skip('Disabled warning for institutions and persons because of buggy Gepris')
     def test_search_results_no_mail_equal_institutions_on_last_dm_run(self):
         # setup
         pipeline = self.get_pipeline()

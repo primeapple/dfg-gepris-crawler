@@ -1,4 +1,4 @@
-import unittest
+from unittest import TestCase, skip
 
 import scrapy
 from psycopg2.extras import Json
@@ -8,7 +8,7 @@ from gepris_crawler.spiders.details import DetailsSpider
 from test.resources import responses, get_settings, get_test_database
 
 
-class DetailsSpiderTest(unittest.TestCase):
+class DetailsSpiderTest(TestCase):
     maxDiff = None
 
     def test_ids_parsing(self):
@@ -94,6 +94,7 @@ class DetailsSpiderTest(unittest.TestCase):
         # just to make sure the attribute is not added
         self.assertEqual(7, len(item['attributes']))
 
+    @skip('Not yet implemented')
     def test_projekt_with_result(self):
         self.fail()
 
