@@ -71,7 +71,7 @@ class BaseSpider(scrapy.Spider, ABC):
             # no class given, happens at person and institute details page for example
             if span_class is None:
                 if last_key is not None:
-                    self.logger.debug(
+                    self.logger.info(
                         f'No class given for span {span.get()}, treating it as value for last key {last_key.get()}')
                     attributes.append([self.non_empty_text(last_key), self.extract_text_and_links(span)])
                     last_key = None
@@ -104,7 +104,7 @@ class BaseSpider(scrapy.Spider, ABC):
                 self.logger.warning(
                     f'Neither element with css class "nameX" or "valueX" found, instead: {span_class}')
         if last_key is not None:
-            self.logger.debug(
+            self.logger.info(
                 f'Empty key found: {last_key.get()}, returning it with null value')
             attributes.append([self.non_empty_text(last_key), None])
         return attributes
@@ -208,14 +208,14 @@ class BaseSpider(scrapy.Spider, ABC):
         non_empty_text_nodes = [clean_string(text) for text in selector.xpath('.//text()[normalize-space()]').getall()
                                 if clean_string(text) != '']
         if len(non_empty_text_nodes) == 0:
-            self.logger.debug(
+            self.logger.info(
                 f'Found no non-empty textnodes in {selector.get()} on url {self.sel_url(selector)} , returning None')
             if err_none:
                 raise ValueError(f'No non empty text nodes found in {selector.get()}  on url {self.sel_url(selector)}')
             else:
                 return None
         elif len(non_empty_text_nodes) > 1:
-            self.logger.debug(
+            self.logger.info(
                 f'Found multiple non-empty textnodes in {selector.get()} on url {self.sel_url(selector)} , returning them')
             if err_mult:
                 raise ValueError(

@@ -304,6 +304,7 @@ def _parse_foerderung_zeitraum(value):
         return {FOERDERUNG_BEGINN: begin, FOERDERUNG_ENDE: end}
     elif value.startswith('Förderung seit '):
         return {FOERDERUNG_BEGINN: value.removeprefix('Förderung seit ')}
+    # TODO: this is probably for foerderungen that start and end in the same year, add FOERDERUNG_ENDE
     elif value.startswith('Förderung in '):
         return {FOERDERUNG_BEGINN: value.removeprefix('Förderung in ')}
     elif value.startswith('Förderung: Bis '):
