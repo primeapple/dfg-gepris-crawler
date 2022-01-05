@@ -359,6 +359,7 @@ class ProjectAttributesLoader(scrapy.loader.ItemLoader):
     geraetegruppe_in = MapCompose()
     dfg_verfahren_out = TakeFirst()
     fachrichtungen_in = MapCompose(split_comma_space)
+    # TODO: there seem to be some fachliche_zuordnungen that have multiple entries: https://gepris.dfg.de/gepris/projekt/431572311
     fachliche_zuordnungen_out = TakeFirst()
     webseite_in = MapCompose(get_reference_path)
     webseite_out = TakeFirst()

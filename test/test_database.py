@@ -195,6 +195,55 @@ class DatabaseTest(TestCase):
                                                                 fetch=True)[0][0]
         self.assertEqual(p101_available_items_detail_check, False)
 
+    def test_mark_detail_check_needed_on_root_institutions_for_moved_sub_institution(self):
+        # set up
+        self.db.execute_sql(Query.into('spider_runs')
+                            .insert(1, 'search_results', 'institution', datetime.now(), datetime.now(), 2)
+                            .insert(2, 'details', 'institution', datetime.now(), datetime.now(), 2)
+                            .insert(3, 'details', 'institution', datetime.now(), datetime.now(), 1)
+                            .get_sql()
+                            )
+        self.db.execute_sql(Query.into('available_items')
+                            .insert(100, 'institution', 1, 1, Json({'name_de': 'i100'}), 2, False)
+                            .insert(101, 'institution', 1, 1, Json({'name_de': 'i101'}), 2, False)
+                            .insert(102, 'institution', 1, 1, Json({'name_de': 'i102'}), 2, False)
+                            .get_sql()
+                            )
+
+        self.db.execute_sql(Query.into('details_items_history')
+                            .insert(100, 'institution', 2, Json({'name_de': 'i100',
+                                                                 'trees': {
+                                                                     'normalised_subinstitutions': [
+                                                                         '101'
+                                                                     ]
+                                                                 }}), 'success')
+                            .insert(101, 'institution', 2, Json({'name_de': 'i101'}), 'success')
+                            .get_sql()
+                            )
+
+        self.db.execute_sql(Query.into('details_items_history')
+                            .insert(101, 'institution', 3, None, 'moved')
+                            .get_sql()
+                            )
+        # test
+        self.db.mark_detail_check_needed_on_root_institutions_for_moved_sub_institution(Mock(run_id=3))
+
+        # assertions
+        available_items = Table('available_items')
+        i100_available_items_detail_check = self.db.execute_sql(Query.from_(available_items)
+                                                                .select(available_items.detail_check_needed)
+                                                                .where(available_items.id.eq(100))
+                                                                .get_sql(),
+                                                                fetch=True)[0][0]
+        self.assertTrue(i100_available_items_detail_check)
+
+        i101_available_items_detail_check = self.db.execute_sql(Query.from_(available_items)
+                                                                .select(available_items.detail_check_needed)
+                                                                .where(available_items.id.eq(101))
+                                                                .get_sql(),
+                                                                fetch=True)[0][0]
+        self.assertFalse(i101_available_items_detail_check)
+
     def test_insert_data_monitor_run(self):
         dm = Table('data_monitor')
         spider = Mock()

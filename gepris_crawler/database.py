@@ -186,6 +186,26 @@ class PostgresDatabase:
             .where(available_items.id.isin(projects_with_moved_references))
         self.execute_sql(q.get_sql())
 
+    def mark_detail_check_needed_on_root_institutions_for_moved_sub_institution(self, spider):
+        details_items_history = Table('details_items_history')
+        moved_institutions = PostgreSQLQuery.select(details_items_history.id) \
+            .from_(details_items_history) \
+            .where(details_items_history.created_at.eq(spider.run_id)) \
+            .where(details_items_history.status.eq('moved'))
+
+        institution_hierarchy = Table('institution_hierarchy')
+        institutions_with_moved_subinstitutions = PostgreSQLQuery.select(institution_hierarchy.root_id) \
+            .from_(institution_hierarchy) \
+            .join(moved_institutions) \
+            .on(moved_institutions.id.eq(institution_hierarchy.id)) \
+            .where(institution_hierarchy.parent_id.notnull())
+
+        available_items = Table('available_items')
+        q = PostgreSQLQuery.update(available_items) \
+            .set(available_items.detail_check_needed, True) \
+            .where(available_items.id.isin(institutions_with_moved_subinstitutions))
+        self.execute_sql(q.get_sql())
+
     def insert_data_monitor_run(self, item):
         dm = Table('data_monitor')
         q = PostgreSQLQuery.into(dm).columns('run_ended_at', *item.keys()).insert(CurTimestamp(), *item.values())

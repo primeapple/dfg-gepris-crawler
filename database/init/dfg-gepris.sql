@@ -113,6 +113,32 @@ FROM latest_detail_items l JOIN
 ON (jsonb_exists(l.item->'attributes', attrs.attr_name))
 WHERE context='projekt';
 
+CREATE VIEW institution_hierarchy AS
+    WITH RECURSIVE institutionen_abhaengigkeiten AS (
+        -- the base query
+        SELECT id,
+            NULL::INT AS parent_id,
+            id AS root_id,
+            item->'trees'->'normalised_subinstitutions' AS children
+        FROM latest_items
+        WHERE context = 'institution'
+            AND item->'trees'->'normalised_subinstitutions' IS NOT NULL
+        UNION
+        -- the recursive query
+        SELECT CASE
+                WHEN jsonb_typeof(arr_children)='string' THEN (arr_children #>> '{}')::INT
+                WHEN jsonb_typeof(arr_children)='object' THEN (SELECT jsonb_object_keys(arr_children))::INT
+            END AS id,
+            id AS parent_id,
+            root_id,
+            CASE
+                WHEN jsonb_typeof(arr_children)='string' THEN NULL::JSONB
+                WHEN jsonb_typeof(arr_children)='object' THEN (arr_children -> (SELECT jsonb_object_keys(arr_children)))
+            END AS children
+        FROM institutionen_abhaengigkeiten CROSS JOIN jsonb_array_elements(children) arr_children
+    )
+    SELECT id, parent_id, root_id FROM institutionen_abhaengigkeiten;
+
 CREATE TABLE data_monitor
 (
 run_ended_at TIMESTAMP WITH TIME ZONE PRIMARY KEY,

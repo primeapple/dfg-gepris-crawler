@@ -38,6 +38,8 @@ class DatabaseInsertionPipeline:
                 spider.db.create_personen_references_from_details_run(spider)
             else:
                 spider.db.mark_detail_check_needed_on_projekts_for_moved_person_institution(spider)
+                if spider.context == 'institution':
+                    spider.db.mark_detail_check_needed_on_root_institutions_for_moved_sub_institution(spider)
         elif spider.name == 'search_results':
             spider.db.update_run_result(spider.run_id, scraped_items)
             spider.db.mark_not_found_available_items(spider)
