@@ -77,8 +77,8 @@ class DetailsPageExpectedStructureCheckMiddleware:
 
     def process_spider_input(self, response, spider):
         # just trying to get something that should always be there
-        context_title = response.css('*.h2-context-title::text').get()
-        dfg_abbreviation = response.css('[title="Deutsche Forschungsgemeinschaft"]::text').get()
+        context_title = response.xpath('//*[contains(@class, "h2-context-title")]/text()').get()
+        dfg_abbreviation = response.xpath('//abbr[@title="Deutsche Forschungsgemeinschaft"]/text()').get()
         if context_title is None or dfg_abbreviation != 'DFG':
             raise UnexpectedDetailsPageStructure(f'Details Page {response.url} has an unexpected structure')
         else:

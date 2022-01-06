@@ -71,40 +71,48 @@ class BaseSpider(scrapy.Spider, ABC):
             # no class given, happens at person and institute details page for example
             if span_class is None:
                 if last_key is not None:
-                    self.logger.info(
+                    self.logger.info(f'No class given for value span on url {self.sel_url(span)}')
+                    self.logger.debug(
                         f'No class given for span {span.get()}, treating it as value for last key {last_key.get()}')
                     attributes.append([self.non_empty_text(last_key), self.extract_text_and_links(span)])
                     last_key = None
                 else:
-                    self.logger.warning(f'No class given for span {span.get()}, we were expecting a key, ignoring it.')
+                    self.logger.warning(f'No class given for key span on url {self.sel_url(span)}')
+                    self.logger.debug(f'No class given for span {span.get()}, we were expecting a key, ignoring it.')
             # this is a key
             elif span_class.startswith('name'):
                 if last_key is not None:
-                    self.logger.warning(
+                    self.logger.warning(f'To consecutive keys found on url {self.sel_url(span)}')
+                    self.logger.debug(
                         f'Two keys behind each other found: {last_key.get()}, {span.get()}, returning the first with null value')
                     attributes.append([self.non_empty_text(last_key), None])
                 last_key = span
             # this is a value
             elif span_class.startswith('value'):
                 if last_key is None:
-                    self.logger.warning(
+                    self.logger.warning(f'Wrong key value structure found on url {self.sel_url(span)}')
+                    self.logger.debug(
                         f'We expect an element with class "nameX" directly before an element with class "valueX" but there was not for value: {span.get()}')
                 elif last_key.attrib['class'][4:] != span_class[5:]:
-                    self.logger.warning(
+                    self.logger.warning(f'Wrong key value structure found on url {self.sel_url(span)}')
+                    self.logger.debug(
                         f'We expect an element with class "nameX" directly before an element with class "valueX" but "X" was different: {last_key.get()}, {span.get()}')
                 else:
                     last_key_text = self.non_empty_text(last_key, err_none=False)
                     if last_key_text is None:
+                        self.logger.warning(f'Wrong key value structure found on url {self.sel_url(span)}')
                         self.logger.warn(f'There was an key element without any text for value element on url: {self.sel_url(span)}')
                     else:
                         attributes.append([last_key_text, self.extract_text_and_links(span)])
                     last_key = None
             # this is something unexpected
             else:
-                self.logger.warning(
+                self.logger.warning(f'Wrong key value structure found on url {self.sel_url(span)}')
+                self.logger.debug(
                     f'Neither element with css class "nameX" or "valueX" found, instead: {span_class}')
         if last_key is not None:
-            self.logger.info(
+            self.logger.info(f'Empty key found on url {self.sel_url(span_selector_list)}')
+            self.logger.debug(
                 f'Empty key found: {last_key.get()}, returning it with null value')
             attributes.append([self.non_empty_text(last_key), None])
         return attributes
@@ -209,17 +217,17 @@ class BaseSpider(scrapy.Spider, ABC):
                                 if clean_string(text) != '']
         if len(non_empty_text_nodes) == 0:
             self.logger.info(
-                f'Found no non-empty textnodes in {selector.get()} on url {self.sel_url(selector)} , returning None')
+                f'Found no non-empty textnodes on url {self.sel_url(selector)} , returning None')
             if err_none:
-                raise ValueError(f'No non empty text nodes found in {selector.get()}  on url {self.sel_url(selector)}')
+                raise ValueError(f'No non empty text nodes on url {self.sel_url(selector)}')
             else:
                 return None
         elif len(non_empty_text_nodes) > 1:
             self.logger.info(
-                f'Found multiple non-empty textnodes in {selector.get()} on url {self.sel_url(selector)} , returning them')
+                f'Found multiple non-empty textnodes on url {self.sel_url(selector)} , returning them')
             if err_mult:
                 raise ValueError(
-                    f'Multiple non-empty textnodes found in {selector.get()}  on url {self.sel_url(selector)}')
+                    f'Multiple non-empty textnodes found on url {self.sel_url(selector)}')
             else:
                 return non_empty_text_nodes
         else:

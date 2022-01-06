@@ -15,6 +15,15 @@ class DetailsPageExpectedStructureCheckMiddlewareTest(TestCase):
         # test/assertion
         self.assertRaises(UnexpectedDetailsPageStructure, middleware.process_spider_input, response, spider)
 
+    def test_unexpected_page_structure_success_en(self):
+        # setup
+        middleware, spider = self._get_middleware_and_spider()
+        response = responses.fake_response_from_file('details/projekt_258745513_en_06012022.html')
+        # test
+        result = middleware.process_spider_input(response, spider)
+        # assertion
+        self.assertIsNone(result)
+
     def test_unexpected_page_structure_success(self):
         # setup
         middleware, spider = self._get_middleware_and_spider()
