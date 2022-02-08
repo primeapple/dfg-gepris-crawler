@@ -1,0 +1,85 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Entity class="oracle.dbtools.crest.model.design.logical.Entity" directorySegmentName="seg_0" id="18C94875-44AB-86B4-821E-F80DEFE76174" name="spider_runs">
+<createdBy>toni</createdBy>
+<createdTime>2022-01-07 13:10:43 UTC</createdTime>
+<ownerDesignName>schema_dfg_gepris</ownerDesignName>
+<engineerTo>
+<item key="9782AF14-684C-0516-E511-7190562C0464" value="true"/>
+</engineerTo>
+<adequatelyNormalized>NO</adequatelyNormalized>
+<expectedVolumes>0</expectedVolumes>
+<fwdEngineeringStrategyName>Single Table</fwdEngineeringStrategyName>
+<growthPercent>0</growthPercent>
+<growthType>Year</growthType>
+<maxVolumes>9999999</maxVolumes>
+<minVolumes>0</minVolumes>
+<normalForm>Third</normalForm>
+<attributes itemClass="oracle.dbtools.crest.model.design.logical.Attribute">
+<Attribute name="run_id" id="9907059C-DC74-E6E3-B018-A6CC3B1DE82F">
+<createdBy>toni</createdBy>
+<createdTime>2022-01-07 13:12:14 UTC</createdTime>
+<ownerDesignName>schema_dfg_gepris</ownerDesignName>
+<engineerTo>
+<item key="9782AF14-684C-0516-E511-7190562C0464" value="true"/>
+</engineerTo>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="spider" id="536AF6D5-F2E5-A6CC-55BE-CECBB214BA79">
+<createdBy>toni</createdBy>
+<createdTime>2022-01-07 13:12:22 UTC</createdTime>
+<ownerDesignName>schema_dfg_gepris</ownerDesignName>
+<engineerTo>
+<item key="9782AF14-684C-0516-E511-7190562C0464" value="true"/>
+</engineerTo>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="run_started_at" id="4F8D6B26-FC94-A6B0-5FDB-48420FAAE640">
+<createdBy>toni</createdBy>
+<createdTime>2022-01-07 13:12:34 UTC</createdTime>
+<ownerDesignName>schema_dfg_gepris</ownerDesignName>
+<engineerTo>
+<item key="9782AF14-684C-0516-E511-7190562C0464" value="true"/>
+</engineerTo>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="run_ended_at" id="0F5E26B1-92A2-7EFC-BEC0-41B5263CBB7D">
+<createdBy>toni</createdBy>
+<createdTime>2022-01-07 13:12:43 UTC</createdTime>
+<ownerDesignName>schema_dfg_gepris</ownerDesignName>
+<engineerTo>
+<item key="9782AF14-684C-0516-E511-7190562C0464" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="total_scraped_items" id="D6C22404-BC03-74E0-D06F-37477F4849B9">
+<createdBy>toni</createdBy>
+<createdTime>2022-01-07 13:12:51 UTC</createdTime>
+<ownerDesignName>schema_dfg_gepris</ownerDesignName>
+<engineerTo>
+<item key="9782AF14-684C-0516-E511-7190562C0464" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+</attributes>
+<identifiers itemClass="oracle.dbtools.crest.model.design.logical.CandidateKey">
+<identifier id="173D17F9-99EA-AD2C-F7C7-C193FCB560E3" name="spider_runs PK">
+<createdBy>toni</createdBy>
+<createdTime>2022-01-07 13:12:19 UTC</createdTime>
+<ownerDesignName>schema_dfg_gepris</ownerDesignName>
+<engineerTo>
+<item key="9782AF14-684C-0516-E511-7190562C0464" value="true"/>
+</engineerTo>
+<pk>true</pk>
+<usedAttributes>
+<attributeRef>9907059C-DC74-E6E3-B018-A6CC3B1DE82F</attributeRef>
+</usedAttributes>
+</identifier>
+</identifiers>
+</Entity>

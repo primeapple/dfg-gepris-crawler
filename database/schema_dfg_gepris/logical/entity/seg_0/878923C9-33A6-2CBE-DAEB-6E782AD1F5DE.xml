@@ -1,0 +1,69 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Entity class="oracle.dbtools.crest.model.design.logical.Entity" directorySegmentName="seg_0" id="878923C9-33A6-2CBE-DAEB-6E782AD1F5DE" name="institutionen_projekte">
+<createdBy>toni</createdBy>
+<createdTime>2022-02-08 09:50:35 UTC</createdTime>
+<ownerDesignName>schema_dfg_gepris</ownerDesignName>
+<engineerTo>
+<item key="9782AF14-684C-0516-E511-7190562C0464" value="true"/>
+</engineerTo>
+<adequatelyNormalized>NO</adequatelyNormalized>
+<expectedVolumes>0</expectedVolumes>
+<fwdEngineeringStrategyName>Single Table</fwdEngineeringStrategyName>
+<growthPercent>0</growthPercent>
+<growthType>Year</growthType>
+<maxVolumes>9999999</maxVolumes>
+<minVolumes>0</minVolumes>
+<normalForm>Third</normalForm>
+<attributes itemClass="oracle.dbtools.crest.model.design.logical.Attribute">
+<Attribute name="institution_beziehung_typ" id="7D561E54-6E5C-B1DE-41DA-AC1882809C0D">
+<createdBy>toni</createdBy>
+<createdTime>2022-02-08 10:04:14 UTC</createdTime>
+<ownerDesignName>schema_dfg_gepris</ownerDesignName>
+<engineerTo>
+<item key="9782AF14-684C-0516-E511-7190562C0464" value="true"/>
+</engineerTo>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="id" id="B431A2A2-3554-12A1-3EDF-22A39BA39B1D">
+<createdBy>toni</createdBy>
+<createdTime>2022-02-08 10:05:55 UTC</createdTime>
+<generatorID>DF22D8A3-A7FE-71F3-FF8A-9D5AAF10710A</generatorID>
+<ownerDesignName>schema_dfg_gepris</ownerDesignName>
+<engineerTo>
+<item key="9782AF14-684C-0516-E511-7190562C0464" value="true"/>
+</engineerTo>
+<referedAttribute>B70B32AB-D4C5-4B35-3AA0-AE18AE16DB68</referedAttribute>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="id1" id="F942F5CE-F346-20B4-1B27-65DD7E2210B0">
+<createdBy>toni</createdBy>
+<createdTime>2022-02-08 10:06:07 UTC</createdTime>
+<generatorID>D54A8018-D37B-0AE2-5995-E71BB1FD2757</generatorID>
+<ownerDesignName>schema_dfg_gepris</ownerDesignName>
+<engineerTo>
+<item key="9782AF14-684C-0516-E511-7190562C0464" value="true"/>
+</engineerTo>
+<referedAttribute>338AE7DE-2B46-E2AD-3762-07554FE02B9D</referedAttribute>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+</attributes>
+<identifiers itemClass="oracle.dbtools.crest.model.design.logical.CandidateKey">
+<identifier id="D3FD9682-93C9-8D11-A89D-D34A5109DBF3" name="institutionen_projekte PK">
+<createdBy>toni</createdBy>
+<createdTime>2022-02-08 10:04:36 UTC</createdTime>
+<ownerDesignName>schema_dfg_gepris</ownerDesignName>
+<engineerTo>
+<item key="9782AF14-684C-0516-E511-7190562C0464" value="true"/>
+</engineerTo>
+<pk>true</pk>
+<usedAttributes>
+<attributeRef>7D561E54-6E5C-B1DE-41DA-AC1882809C0D</attributeRef>
+<attributeRef>B431A2A2-3554-12A1-3EDF-22A39BA39B1D</attributeRef>
+<attributeRef>F942F5CE-F346-20B4-1B27-65DD7E2210B0</attributeRef>
+</usedAttributes>
+</identifier>
+</identifiers>
+</Entity>

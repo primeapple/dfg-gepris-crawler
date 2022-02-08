@@ -1,0 +1,87 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Entity class="oracle.dbtools.crest.model.design.logical.Entity" directorySegmentName="seg_0" id="915E165A-C8BB-79B6-5215-A298D9919234" name="details_items_history">
+<createdBy>toni</createdBy>
+<createdTime>2022-01-07 13:11:05 UTC</createdTime>
+<ownerDesignName>schema_dfg_gepris</ownerDesignName>
+<engineerTo>
+<item key="9782AF14-684C-0516-E511-7190562C0464" value="true"/>
+</engineerTo>
+<adequatelyNormalized>NO</adequatelyNormalized>
+<expectedVolumes>0</expectedVolumes>
+<fwdEngineeringStrategyName>Single Table</fwdEngineeringStrategyName>
+<growthPercent>0</growthPercent>
+<growthType>Year</growthType>
+<maxVolumes>9999999</maxVolumes>
+<minVolumes>0</minVolumes>
+<normalForm>Third</normalForm>
+<attributes itemClass="oracle.dbtools.crest.model.design.logical.Attribute">
+<Attribute name="id" id="D46B55A4-345B-2CE4-CD8C-6B9BD42A96D4">
+<createdBy>toni</createdBy>
+<createdTime>2022-01-07 13:15:32 UTC</createdTime>
+<ownerDesignName>schema_dfg_gepris</ownerDesignName>
+<engineerTo>
+<item key="9782AF14-684C-0516-E511-7190562C0464" value="true"/>
+</engineerTo>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="context" id="FCBD7A5F-2E2A-C664-BF18-4EAEEE4CD185">
+<createdBy>toni</createdBy>
+<createdTime>2022-01-07 13:15:44 UTC</createdTime>
+<ownerDesignName>schema_dfg_gepris</ownerDesignName>
+<engineerTo>
+<item key="9782AF14-684C-0516-E511-7190562C0464" value="true"/>
+</engineerTo>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="item" id="5941C641-CA66-7B84-695F-3A214A8AF9CE">
+<createdBy>toni</createdBy>
+<createdTime>2022-01-07 13:15:56 UTC</createdTime>
+<ownerDesignName>schema_dfg_gepris</ownerDesignName>
+<engineerTo>
+<item key="9782AF14-684C-0516-E511-7190562C0464" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="status" id="557D12A7-2143-052B-FBAC-A16E37145B2F">
+<createdBy>toni</createdBy>
+<createdTime>2022-01-07 13:15:59 UTC</createdTime>
+<ownerDesignName>schema_dfg_gepris</ownerDesignName>
+<engineerTo>
+<item key="9782AF14-684C-0516-E511-7190562C0464" value="true"/>
+</engineerTo>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="run_id" id="910868CE-9E93-E907-A5A8-96E56F028050">
+<createdBy>toni</createdBy>
+<createdTime>2022-01-07 13:16:36 UTC</createdTime>
+<generatorID>64E13844-68AB-8159-7FCE-F80CCCAD5C24</generatorID>
+<ownerDesignName>schema_dfg_gepris</ownerDesignName>
+<engineerTo>
+<item key="9782AF14-684C-0516-E511-7190562C0464" value="true"/>
+</engineerTo>
+<referedAttribute>9907059C-DC74-E6E3-B018-A6CC3B1DE82F</referedAttribute>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+</attributes>
+<identifiers itemClass="oracle.dbtools.crest.model.design.logical.CandidateKey">
+<identifier id="AE5A5B8A-A52A-CA40-2545-0323A91E90D0" name="details_items_history PK">
+<createdBy>toni</createdBy>
+<createdTime>2022-01-07 13:15:43 UTC</createdTime>
+<ownerDesignName>schema_dfg_gepris</ownerDesignName>
+<engineerTo>
+<item key="9782AF14-684C-0516-E511-7190562C0464" value="true"/>
+</engineerTo>
+<pk>true</pk>
+<usedAttributes>
+<attributeRef>D46B55A4-345B-2CE4-CD8C-6B9BD42A96D4</attributeRef>
+<attributeRef>FCBD7A5F-2E2A-C664-BF18-4EAEEE4CD185</attributeRef>
+</usedAttributes>
+</identifier>
+</identifiers>
+</Entity>

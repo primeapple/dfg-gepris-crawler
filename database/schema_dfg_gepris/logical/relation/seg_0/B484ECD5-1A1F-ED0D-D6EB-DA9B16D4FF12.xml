@@ -1,0 +1,21 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Relation class="oracle.dbtools.crest.model.design.logical.Relation" name="Relation_7" directorySegmentName="seg_0" id="B484ECD5-1A1F-ED0D-D6EB-DA9B16D4FF12">
+<createdBy>toni</createdBy>
+<createdTime>2022-02-08 08:57:30 UTC</createdTime>
+<ownerDesignName>schema_dfg_gepris</ownerDesignName>
+<engineerTo>
+<item key="9782AF14-684C-0516-E511-7190562C0464" value="true"/>
+</engineerTo>
+<sourcePk>173D17F9-99EA-AD2C-F7C7-C193FCB560E3</sourcePk>
+<identifying>false</identifying>
+<nameOnSource> </nameOnSource>
+<nameOnTarget>last_detail_check</nameOnTarget>
+<optionalSource>true</optionalSource>
+<optionalTarget>true</optionalTarget>
+<sourceCardinality>1</sourceCardinality>
+<sourceEntity>0FA47135-CAFD-C120-BABE-A0B0CB99BA68</sourceEntity>
+<targetCardinalityString>*</targetCardinalityString>
+<targetEntity>0978705A-82E3-7395-B82F-6BEC6706A209</targetEntity>
+<transferable>true</transferable>
+<deleteRule>NO ACTION</deleteRule>
+</Relation>

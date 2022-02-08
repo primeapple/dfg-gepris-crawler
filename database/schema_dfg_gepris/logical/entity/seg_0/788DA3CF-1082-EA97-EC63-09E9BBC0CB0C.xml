@@ -1,7 +1,7 @@
 <?xml version = '1.0' encoding = 'UTF-8'?>
-<Entity class="oracle.dbtools.crest.model.design.logical.Entity" directorySegmentName="seg_0" id="6963754D-BC94-0C3F-B09A-3B330FCF96EA" name="projekte">
+<Entity class="oracle.dbtools.crest.model.design.logical.Entity" directorySegmentName="seg_0" id="788DA3CF-1082-EA97-EC63-09E9BBC0CB0C" name="data_monitor_results">
 <createdBy>toni</createdBy>
-<createdTime>2021-08-09 07:10:33 UTC</createdTime>
+<createdTime>2022-01-07 13:11:27 UTC</createdTime>
 <ownerDesignName>schema_dfg_gepris</ownerDesignName>
 <engineerTo>
 <item key="9782AF14-684C-0516-E511-7190562C0464" value="true"/>
@@ -15,9 +15,9 @@
 <minVolumes>0</minVolumes>
 <normalForm>Third</normalForm>
 <attributes itemClass="oracle.dbtools.crest.model.design.logical.Attribute">
-<Attribute name="id" id="B70B32AB-D4C5-4B35-3AA0-AE18AE16DB68">
+<Attribute name="last_update" id="ADCECA65-86A4-14A4-F998-8D1D26E9A76F">
 <createdBy>toni</createdBy>
-<createdTime>2021-08-09 07:11:59 UTC</createdTime>
+<createdTime>2022-01-07 13:18:10 UTC</createdTime>
 <ownerDesignName>schema_dfg_gepris</ownerDesignName>
 <engineerTo>
 <item key="9782AF14-684C-0516-E511-7190562C0464" value="true"/>
@@ -25,9 +25,99 @@
 <use>0</use>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 </Attribute>
-<Attribute name="name_de" id="FD112EA9-6F55-BF7D-DCD4-79D51C0DA99D">
+<Attribute name="last_approval" id="0F8885B4-FCED-3F62-396A-48CC8294C867">
 <createdBy>toni</createdBy>
-<createdTime>2021-08-09 07:11:46 UTC</createdTime>
+<createdTime>2022-01-07 13:18:15 UTC</createdTime>
+<ownerDesignName>schema_dfg_gepris</ownerDesignName>
+<engineerTo>
+<item key="9782AF14-684C-0516-E511-7190562C0464" value="true"/>
+</engineerTo>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="finished_project_count" id="8A7ECBA3-2737-D5CC-DD5E-6B5C6C53D98D">
+<createdBy>toni</createdBy>
+<createdTime>2022-01-07 13:26:33 UTC</createdTime>
+<ownerDesignName>schema_dfg_gepris</ownerDesignName>
+<engineerTo>
+<item key="9782AF14-684C-0516-E511-7190562C0464" value="true"/>
+</engineerTo>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="project_count" id="37DB4B2C-B869-EB6B-C483-8447D6D644CE">
+<createdBy>toni</createdBy>
+<createdTime>2022-01-07 13:26:43 UTC</createdTime>
+<ownerDesignName>schema_dfg_gepris</ownerDesignName>
+<engineerTo>
+<item key="9782AF14-684C-0516-E511-7190562C0464" value="true"/>
+</engineerTo>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="person_count" id="B0AAC9C8-061A-5586-E890-F5B877B83227">
+<createdBy>toni</createdBy>
+<createdTime>2022-01-07 13:26:52 UTC</createdTime>
+<ownerDesignName>schema_dfg_gepris</ownerDesignName>
+<engineerTo>
+<item key="9782AF14-684C-0516-E511-7190562C0464" value="true"/>
+</engineerTo>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="institution_count" id="E7A88634-4E4A-E857-41AB-B75021E37500">
+<createdBy>toni</createdBy>
+<createdTime>2022-01-07 13:26:58 UTC</createdTime>
+<ownerDesignName>schema_dfg_gepris</ownerDesignName>
+<engineerTo>
+<item key="9782AF14-684C-0516-E511-7190562C0464" value="true"/>
+</engineerTo>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="humanities_count" id="1B5C5F5D-47CC-1B2E-1D88-60F99A7523CE">
+<createdBy>toni</createdBy>
+<createdTime>2022-01-07 13:27:07 UTC</createdTime>
+<ownerDesignName>schema_dfg_gepris</ownerDesignName>
+<engineerTo>
+<item key="9782AF14-684C-0516-E511-7190562C0464" value="true"/>
+</engineerTo>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="life_count" id="4E38BBA0-34CB-EE70-9025-73DCD081EE38">
+<createdBy>toni</createdBy>
+<createdTime>2022-01-07 13:27:16 UTC</createdTime>
+<ownerDesignName>schema_dfg_gepris</ownerDesignName>
+<engineerTo>
+<item key="9782AF14-684C-0516-E511-7190562C0464" value="true"/>
+</engineerTo>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="natural_count" id="0FADB66E-2E0F-707B-3995-00943D086D92">
+<createdBy>toni</createdBy>
+<createdTime>2022-01-07 13:27:27 UTC</createdTime>
+<ownerDesignName>schema_dfg_gepris</ownerDesignName>
+<engineerTo>
+<item key="9782AF14-684C-0516-E511-7190562C0464" value="true"/>
+</engineerTo>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="engineering_count" id="87C026FD-6BFE-6C56-02FC-C190D61CF6E2">
+<createdBy>toni</createdBy>
+<createdTime>2022-01-07 13:27:34 UTC</createdTime>
+<ownerDesignName>schema_dfg_gepris</ownerDesignName>
+<engineerTo>
+<item key="9782AF14-684C-0516-E511-7190562C0464" value="true"/>
+</engineerTo>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="infrastructure_count" id="5EDFAC00-332E-7F17-2EE1-65C81DB5638F">
+<createdBy>toni</createdBy>
+<createdTime>2022-01-07 13:27:39 UTC</createdTime>
 <ownerDesignName>schema_dfg_gepris</ownerDesignName>
 <engineerTo>
 <item key="9782AF14-684C-0516-E511-7190562C0464" value="true"/>
@@ -36,9 +126,9 @@
 <use>0</use>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 </Attribute>
-<Attribute name="name_en" id="E392255B-BE94-6AD8-7B50-68190C85AB37">
+<Attribute name="research_infrastructure_count" id="CADC82D4-6805-D21F-43E4-9789A7F28D92">
 <createdBy>toni</createdBy>
-<createdTime>2021-08-09 07:12:11 UTC</createdTime>
+<createdTime>2022-01-07 13:27:59 UTC</createdTime>
 <ownerDesignName>schema_dfg_gepris</ownerDesignName>
 <engineerTo>
 <item key="9782AF14-684C-0516-E511-7190562C0464" value="true"/>
@@ -47,207 +137,60 @@
 <use>0</use>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 </Attribute>
-<Attribute name="beschreibung_de" id="29914A21-3393-FDFE-DADA-B2EFDBA4E999">
+<Attribute name="gepris_version" id="C29E9FA5-9B37-ABD0-CBD1-EBDF9363B333">
 <createdBy>toni</createdBy>
-<createdTime>2022-02-08 09:46:23 UTC</createdTime>
+<createdTime>2022-01-07 13:28:15 UTC</createdTime>
 <ownerDesignName>schema_dfg_gepris</ownerDesignName>
 <engineerTo>
 <item key="9782AF14-684C-0516-E511-7190562C0464" value="true"/>
 </engineerTo>
-<nullsAllowed>true</nullsAllowed>
 <use>0</use>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 </Attribute>
-<Attribute name="beschreibung_en" id="B6A52B54-A356-5E5C-5596-7AF256CF3781">
+<Attribute name="gepris_index_version" id="FFB70209-D549-FA12-A3D5-14262FC046DE">
 <createdBy>toni</createdBy>
-<createdTime>2022-02-08 09:46:32 UTC</createdTime>
+<createdTime>2022-01-07 13:28:33 UTC</createdTime>
 <ownerDesignName>schema_dfg_gepris</ownerDesignName>
 <engineerTo>
 <item key="9782AF14-684C-0516-E511-7190562C0464" value="true"/>
 </engineerTo>
-<nullsAllowed>true</nullsAllowed>
 <use>0</use>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 </Attribute>
-<Attribute name="dfg_ansprechpartner" id="11220E23-364B-58A2-404A-1286685D1E8E">
+<Attribute name="gepris_index_date" id="D1D7008B-7436-3708-12AC-8C81CF16254E">
 <createdBy>toni</createdBy>
-<createdTime>2022-02-08 09:46:46 UTC</createdTime>
+<createdTime>2022-01-07 13:28:41 UTC</createdTime>
 <ownerDesignName>schema_dfg_gepris</ownerDesignName>
 <engineerTo>
 <item key="9782AF14-684C-0516-E511-7190562C0464" value="true"/>
 </engineerTo>
-<nullsAllowed>true</nullsAllowed>
 <use>0</use>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 </Attribute>
-<Attribute name="internationaler_bezug" id="6435A080-EFB4-7A81-8117-E3EC86307522">
+<Attribute name="run_id" id="C3287093-95E4-20FF-D874-A6D67EFF75C7">
 <createdBy>toni</createdBy>
-<createdTime>2022-02-08 09:46:53 UTC</createdTime>
+<createdTime>2022-02-08 07:42:29 UTC</createdTime>
+<generatorID>4BDD0CE1-7B6E-F2FB-E92C-E8BE262ED23C</generatorID>
 <ownerDesignName>schema_dfg_gepris</ownerDesignName>
 <engineerTo>
 <item key="9782AF14-684C-0516-E511-7190562C0464" value="true"/>
 </engineerTo>
-<nullsAllowed>true</nullsAllowed>
-<use>0</use>
-<ownDataTypeParameters>,,</ownDataTypeParameters>
-</Attribute>
-<Attribute name="gross_geraete" id="BCACA9E9-90EA-E95D-BEAE-FFA207F3EDB4">
-<createdBy>toni</createdBy>
-<createdTime>2022-02-08 09:47:15 UTC</createdTime>
-<ownerDesignName>schema_dfg_gepris</ownerDesignName>
-<engineerTo>
-<item key="9782AF14-684C-0516-E511-7190562C0464" value="true"/>
-</engineerTo>
-<nullsAllowed>true</nullsAllowed>
-<use>0</use>
-<ownDataTypeParameters>,,</ownDataTypeParameters>
-</Attribute>
-<Attribute name="geraetegruppe" id="91C7528F-C7B2-53D9-9F41-98BAF1CB4B2F">
-<createdBy>toni</createdBy>
-<createdTime>2022-02-08 09:47:24 UTC</createdTime>
-<ownerDesignName>schema_dfg_gepris</ownerDesignName>
-<engineerTo>
-<item key="9782AF14-684C-0516-E511-7190562C0464" value="true"/>
-</engineerTo>
-<nullsAllowed>true</nullsAllowed>
-<use>0</use>
-<ownDataTypeParameters>,,</ownDataTypeParameters>
-</Attribute>
-<Attribute name="dfg_verfahren" id="E3C9920F-54D1-EA3B-C8D7-7C641FD130E8">
-<createdBy>toni</createdBy>
-<createdTime>2022-02-08 09:47:30 UTC</createdTime>
-<ownerDesignName>schema_dfg_gepris</ownerDesignName>
-<engineerTo>
-<item key="9782AF14-684C-0516-E511-7190562C0464" value="true"/>
-</engineerTo>
-<nullsAllowed>true</nullsAllowed>
-<use>0</use>
-<ownDataTypeParameters>,,</ownDataTypeParameters>
-</Attribute>
-<Attribute name="fachrichtungen" id="53159E55-3A3C-70B8-0931-406C65F12C9A">
-<createdBy>toni</createdBy>
-<createdTime>2022-02-08 09:47:35 UTC</createdTime>
-<ownerDesignName>schema_dfg_gepris</ownerDesignName>
-<engineerTo>
-<item key="9782AF14-684C-0516-E511-7190562C0464" value="true"/>
-</engineerTo>
-<nullsAllowed>true</nullsAllowed>
-<use>0</use>
-<ownDataTypeParameters>,,</ownDataTypeParameters>
-</Attribute>
-<Attribute name="fachliche_zuordnungen" id="F35AF004-C4E0-8500-090E-CBC4081DAED3">
-<createdBy>toni</createdBy>
-<createdTime>2022-02-08 09:47:38 UTC</createdTime>
-<ownerDesignName>schema_dfg_gepris</ownerDesignName>
-<engineerTo>
-<item key="9782AF14-684C-0516-E511-7190562C0464" value="true"/>
-</engineerTo>
-<nullsAllowed>true</nullsAllowed>
-<use>0</use>
-<ownDataTypeParameters>,,</ownDataTypeParameters>
-</Attribute>
-<Attribute name="webseite" id="06404B6B-1FE1-BA63-6720-86E79C7E17B1">
-<createdBy>toni</createdBy>
-<createdTime>2022-02-08 09:47:45 UTC</createdTime>
-<ownerDesignName>schema_dfg_gepris</ownerDesignName>
-<engineerTo>
-<item key="9782AF14-684C-0516-E511-7190562C0464" value="true"/>
-</engineerTo>
-<nullsAllowed>true</nullsAllowed>
-<use>0</use>
-<ownDataTypeParameters>,,</ownDataTypeParameters>
-</Attribute>
-<Attribute name="foerderung_beginn" id="B6046A27-867D-19F7-3954-D749D03D72BE">
-<createdBy>toni</createdBy>
-<createdTime>2022-02-08 09:47:51 UTC</createdTime>
-<ownerDesignName>schema_dfg_gepris</ownerDesignName>
-<engineerTo>
-<item key="9782AF14-684C-0516-E511-7190562C0464" value="true"/>
-</engineerTo>
-<nullsAllowed>true</nullsAllowed>
-<use>0</use>
-<ownDataTypeParameters>,,</ownDataTypeParameters>
-</Attribute>
-<Attribute name="foerdung_ende" id="A868AB19-1A83-79DB-55CA-FDB842ADFE4F">
-<createdBy>toni</createdBy>
-<createdTime>2022-02-08 09:47:58 UTC</createdTime>
-<ownerDesignName>schema_dfg_gepris</ownerDesignName>
-<engineerTo>
-<item key="9782AF14-684C-0516-E511-7190562C0464" value="true"/>
-</engineerTo>
-<nullsAllowed>true</nullsAllowed>
-<use>0</use>
-<ownDataTypeParameters>,,</ownDataTypeParameters>
-</Attribute>
-<Attribute name="ergebnis_zusammenfassung_de" id="6C107BE1-14B3-E0A6-227F-6083E1781F15">
-<createdBy>toni</createdBy>
-<createdTime>2022-02-08 09:48:07 UTC</createdTime>
-<ownerDesignName>schema_dfg_gepris</ownerDesignName>
-<engineerTo>
-<item key="9782AF14-684C-0516-E511-7190562C0464" value="true"/>
-</engineerTo>
-<nullsAllowed>true</nullsAllowed>
-<use>0</use>
-<ownDataTypeParameters>,,</ownDataTypeParameters>
-</Attribute>
-<Attribute name="ergebnis_zusammenfassung_en" id="D983AB23-9CD8-FBDE-AE2B-4C87E97CB9A6">
-<createdBy>toni</createdBy>
-<createdTime>2022-02-08 09:48:15 UTC</createdTime>
-<ownerDesignName>schema_dfg_gepris</ownerDesignName>
-<engineerTo>
-<item key="9782AF14-684C-0516-E511-7190562C0464" value="true"/>
-</engineerTo>
-<nullsAllowed>true</nullsAllowed>
-<use>0</use>
-<ownDataTypeParameters>,,</ownDataTypeParameters>
-</Attribute>
-<Attribute name="ergebnis_publikationen" id="BD1BAAC3-4E23-B1E2-6BDB-03E2C1AC6E6B">
-<createdBy>toni</createdBy>
-<createdTime>2022-02-08 09:48:01 UTC</createdTime>
-<ownerDesignName>schema_dfg_gepris</ownerDesignName>
-<engineerTo>
-<item key="9782AF14-684C-0516-E511-7190562C0464" value="true"/>
-</engineerTo>
-<nullsAllowed>true</nullsAllowed>
-<use>0</use>
-<ownDataTypeParameters>,,</ownDataTypeParameters>
-</Attribute>
-<Attribute name="ergebnis_erstellungsjahr" id="D6E56DD9-388A-835D-5EB8-B5C3A4E9E052">
-<createdBy>toni</createdBy>
-<createdTime>2022-02-08 09:48:23 UTC</createdTime>
-<ownerDesignName>schema_dfg_gepris</ownerDesignName>
-<engineerTo>
-<item key="9782AF14-684C-0516-E511-7190562C0464" value="true"/>
-</engineerTo>
-<nullsAllowed>true</nullsAllowed>
-<use>0</use>
-<ownDataTypeParameters>,,</ownDataTypeParameters>
-</Attribute>
-<Attribute name="id1" id="7E99E265-B4A6-D8EB-5E02-0EA085E47315">
-<createdBy>toni</createdBy>
-<createdTime>2022-02-08 09:48:54 UTC</createdTime>
-<generatorID>8F7E399F-3992-30FC-BBD2-1D0CFA77AFBB</generatorID>
-<ownerDesignName>schema_dfg_gepris</ownerDesignName>
-<engineerTo>
-<item key="9782AF14-684C-0516-E511-7190562C0464" value="true"/>
-</engineerTo>
-<nullsAllowed>true</nullsAllowed>
-<referedAttribute>B70B32AB-D4C5-4B35-3AA0-AE18AE16DB68</referedAttribute>
+<referedAttribute>9907059C-DC74-E6E3-B018-A6CC3B1DE82F</referedAttribute>
 <use>0</use>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 </Attribute>
 </attributes>
 <identifiers itemClass="oracle.dbtools.crest.model.design.logical.CandidateKey">
-<identifier id="A3E61224-ACD1-1264-2A02-7808F343187B" name="projekte PK">
+<identifier id="1AFA7DC2-E456-595D-E10B-181C22D1CD84" name="data_monitor PK">
 <createdBy>toni</createdBy>
-<createdTime>2021-08-09 07:12:02 UTC</createdTime>
+<createdTime>2022-01-07 13:18:12 UTC</createdTime>
 <ownerDesignName>schema_dfg_gepris</ownerDesignName>
 <engineerTo>
 <item key="9782AF14-684C-0516-E511-7190562C0464" value="true"/>
 </engineerTo>
 <pk>true</pk>
 <usedAttributes>
-<attributeRef>B70B32AB-D4C5-4B35-3AA0-AE18AE16DB68</attributeRef>
+<attributeRef>C3287093-95E4-20FF-D874-A6D67EFF75C7</attributeRef>
 </usedAttributes>
 </identifier>
 </identifiers>
