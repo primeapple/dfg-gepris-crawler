@@ -37,6 +37,18 @@
 <use>0</use>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 </Attribute>
+<Attribute name="id1" id="E3FD45A6-6BC8-0148-C8EC-2D952B9269D3">
+<createdBy>toni</createdBy>
+<createdTime>2022-02-08 17:47:41 UTC</createdTime>
+<generatorID>843431B9-8740-1BAE-D69C-7FBC31D69679</generatorID>
+<ownerDesignName>schema_dfg_gepris</ownerDesignName>
+<engineerTo>
+<item key="9782AF14-684C-0516-E511-7190562C0464" value="true"/>
+</engineerTo>
+<referedAttribute>25DBC5AB-C072-1F4B-D366-F693D858237F</referedAttribute>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
 </attributes>
 <identifiers itemClass="oracle.dbtools.crest.model.design.logical.CandidateKey">
 <identifier id="92886F11-3299-1B13-C1C5-79B0A6790292" name="personen_projekte PK">

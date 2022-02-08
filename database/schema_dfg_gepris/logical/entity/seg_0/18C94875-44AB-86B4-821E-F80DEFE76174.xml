@@ -25,16 +25,6 @@
 <use>0</use>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 </Attribute>
-<Attribute name="spider" id="536AF6D5-F2E5-A6CC-55BE-CECBB214BA79">
-<createdBy>toni</createdBy>
-<createdTime>2022-01-07 13:12:22 UTC</createdTime>
-<ownerDesignName>schema_dfg_gepris</ownerDesignName>
-<engineerTo>
-<item key="9782AF14-684C-0516-E511-7190562C0464" value="true"/>
-</engineerTo>
-<use>0</use>
-<ownDataTypeParameters>,,</ownDataTypeParameters>
-</Attribute>
 <Attribute name="run_started_at" id="4F8D6B26-FC94-A6B0-5FDB-48420FAAE640">
 <createdBy>toni</createdBy>
 <createdTime>2022-01-07 13:12:34 UTC</createdTime>

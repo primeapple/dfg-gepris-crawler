@@ -112,7 +112,7 @@
 <use>0</use>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 </Attribute>
-<Attribute name="guessed_gender" id="2FC206C7-2E23-5EE8-0E0A-8C65C73B4ED9">
+<Attribute name="gender" id="2FC206C7-2E23-5EE8-0E0A-8C65C73B4ED9">
 <createdBy>toni</createdBy>
 <createdTime>2022-02-08 09:37:54 UTC</createdTime>
 <ownerDesignName>schema_dfg_gepris</ownerDesignName>
@@ -124,4 +124,18 @@
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 </Attribute>
 </attributes>
+<identifiers itemClass="oracle.dbtools.crest.model.design.logical.CandidateKey">
+<identifier id="2E5B7CAF-FB47-7D44-3EAB-F757AA84B4E3" name="personen PK">
+<createdBy>toni</createdBy>
+<createdTime>2022-02-08 17:47:40 UTC</createdTime>
+<ownerDesignName>schema_dfg_gepris</ownerDesignName>
+<engineerTo>
+<item key="9782AF14-684C-0516-E511-7190562C0464" value="true"/>
+</engineerTo>
+<pk>true</pk>
+<usedAttributes>
+<attributeRef>25DBC5AB-C072-1F4B-D366-F693D858237F</attributeRef>
+</usedAttributes>
+</identifier>
+</identifiers>
 </Entity>
