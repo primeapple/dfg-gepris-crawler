@@ -18,7 +18,7 @@ PATH=/usr/local/bin:/usr/bin:/bin
 15 3 * * * scrapyd-client schedule -p gepris_crawler --arg context=projekt --arg ids=db:needed:500 details  > /proc/1/fd/1 2>/proc/1/fd/2
 ### 50000 Details requests a day for Re-Indexing to detect changes ###
 # 1. of month at 03.30 - details - institution - all (max 50000), sorted by last scrap descending
-# 2.-4., 6.-9. of month at 03.30 - details - projekt - all (max 50000), sorted by last scrap descending
+# 2.-4., 6.-9. of month at 03.30 - details - projekt - all (max 20000), sorted by last scrap descending
 # 5., 10. of month at 03.30 - details - person - all (max 50000), sorted by last scrap descending
 # every command is repeated every 10th day, except for 31. of month, where nothing is done
 30 3 1,11,21 * * scrapyd-client schedule -p gepris_crawler --arg context=institution --arg ids=db:all:50000 details  > /proc/1/fd/1 2>/proc/1/fd/2

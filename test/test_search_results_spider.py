@@ -97,6 +97,23 @@ class SearchResultsSpiderTest(unittest.TestCase):
         items = self._test_parse('institution', 'search_results/institution_9290_10_21102021.html', 10)
         self.assertDictEqual(dict(items[4]), expected_item)
 
+    def test_set_total_items_success(self):
+        spider = SearchResultsSpider(context='projekt', items=1, settings=get_settings(database=False))
+        spider.set_total_items(responses.fake_response_from_file('search_results/projekt_0_1_12022022.html'))
+        self.assertEqual(spider.total_items, 138127)
+
+    def test_set_total_items_failure(self):
+        spider = SearchResultsSpider(context='projekt', items=1, settings=get_settings(database=False))
+        # response without any total items
+        spider.set_total_items(responses.fake_response_from_file('data_monitor/03112021.html'))
+        self.assertEqual(spider.total_items, 0)
+        self.assertTrue(spider.had_error)
+
+        # spider should not yield any results
+        result = spider.parse(responses.fake_response_from_file('data_monitor/03112021.html'), 1)
+        items = [i for i in result]
+        self.assertListEqual(items, [])
+
     def _test_parse(self, context, file, items_per_page, check_items_count=True):
         spider = SearchResultsSpider(context=context, items=items_per_page, settings=get_settings(database=False))
         result = spider.parse(responses.fake_response_from_file(file), items_per_page)

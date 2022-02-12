@@ -38,6 +38,8 @@ class SearchResultsSpider(BaseSpider):
         # set total items if not set before
         if self.total_items == math.inf:
             self.set_total_items(response)
+            if self.had_error:
+                return
         results_on_page = response.xpath('//*[@id="liste"]/div[@class!="pagination"]')
         # iterate over all results on page
         loaded_items = 0
@@ -64,10 +66,15 @@ class SearchResultsSpider(BaseSpider):
 
     def set_total_items(self, response):
         self.logger.info('Trying to find total items')
-        self.total_items = int(
-            response.xpath('//*[@id=$total_result_id]', total_result_id='result-info')
+        try:
+            self.total_items = int(
+                response.xpath('//*[@id=$total_result_id]', total_result_id='result-info')
                     .attrib['data-result-count'].replace('.', '')
-        )
+            )
+        except Exception as e:
+            self.logger.error(f'{e} - Did not find total result count, setting it to 0')
+            self.total_items = 0
+            self.had_error = True
 
     def load_project(self, loader, result_selector):
         for detail_line in result_selector.xpath('./div[@class="details"]/div'):

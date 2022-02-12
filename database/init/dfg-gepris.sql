@@ -7,6 +7,7 @@ CREATE TYPE CONTEXT_TYPE AS ENUM ('projekt', 'person', 'institution');
 
 CREATE SEQUENCE spider_runs_id;
 
+-- TODO: remove unique key, make context nullable, connect with data_monitor
 CREATE TABLE spider_runs
 (
 id INTEGER PRIMARY KEY DEFAULT nextval('spider_runs_id'),
@@ -166,7 +167,6 @@ current_index_date TIMESTAMP WITH TIME ZONE NOT NULL
 
 CREATE TYPE PERSON_GENDER_TYPE AS ENUM ('male', 'female', 'unknown');
 
--- TODO: create materialized views for this
 CREATE TABLE personen (
   id INTEGER PRIMARY KEY,
   name TEXT NOT NULL,

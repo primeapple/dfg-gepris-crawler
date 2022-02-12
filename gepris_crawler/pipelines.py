@@ -35,6 +35,7 @@ class DatabaseInsertionPipeline:
         if spider.name == 'details':
             spider.db.update_run_result(spider.run_id, scraped_items)
             if spider.context == 'projekt':
+                # TODO: also create non existing institutionen references from details run
                 spider.db.create_personen_references_from_details_run(spider)
             else:
                 spider.db.mark_detail_check_needed_on_projekts_for_moved_person_institution(spider)
