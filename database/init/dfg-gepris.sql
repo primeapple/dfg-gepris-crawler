@@ -325,7 +325,7 @@ CREATE FUNCTION create_projekte_from_items() RETURNS VOID LANGUAGE PLPGSQL AS $$
                 ARRAY(SELECT jsonb_array_elements_text(item->'attributes'->'geraetegruppe')),
                 item->'attributes'->>'dfg_verfahren',
                 ARRAY(SELECT jsonb_array_elements_text(item->'attributes'->'fachrichtungen')),
-                item->'attributes'->>'fachliche_zuordnungen',
+                ARRAY(SELECT jsonb_array_elements_text(item->'attributes'->>'fachliche_zuordnungen')),
                 item->'attributes'->>'webseite',
                 (item->'attributes'->>'foerderung_beginn')::INT,
                 (item->'attributes'->>'foerderung_ende')::INT,

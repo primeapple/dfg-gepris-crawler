@@ -26,6 +26,7 @@ class SearchResultsSpider(BaseSpider):
         self.seen_ids = set()
 
     def start_requests(self):
+        # TODO: if the site gives back non 200 http code we run into endless loop
         current_index = 0
         while current_index < self.total_items:
             items_on_this_page = min(self.items_per_page, self.total_items - current_index)

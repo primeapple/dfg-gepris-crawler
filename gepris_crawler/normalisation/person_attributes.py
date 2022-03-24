@@ -35,6 +35,7 @@ class PersonAttributesLoader(scrapy.loader.ItemLoader):
     default_item_class = PersonAttributes
     default_output_processor = TakeFirst()
     adresse_in = Compose(lambda v: filter_no_address_found(v[0]) if is_list_with_single_string(v) else v)
+    # TODO: only keep numbers and '+' for telefon and telefax
     # we could also use the array, but joining it makes it more readable at the moment
     adresse_out = Join(', ')
     mail_out = Join('@')

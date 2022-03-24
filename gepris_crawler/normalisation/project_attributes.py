@@ -304,9 +304,10 @@ def _parse_foerderung_zeitraum(value):
         return {FOERDERUNG_BEGINN: begin, FOERDERUNG_ENDE: end}
     elif value.startswith('Förderung seit '):
         return {FOERDERUNG_BEGINN: value.removeprefix('Förderung seit ')}
-    # TODO: this is probably for foerderungen that start and end in the same year, add FOERDERUNG_ENDE
+        # TODO: add test for this
     elif value.startswith('Förderung in '):
-        return {FOERDERUNG_BEGINN: value.removeprefix('Förderung in ')}
+        year = value.removeprefix('Förderung in ')
+        return {FOERDERUNG_BEGINN: year, FOERDERUNG_ENDE: year}
     elif value.startswith('Förderung: Bis '):
         return {FOERDERUNG_ENDE: value.removeprefix('Förderung: Bis ')}
     elif value == 'Befindet sich in der laufenden Förderung.':
@@ -359,8 +360,6 @@ class ProjectAttributesLoader(scrapy.loader.ItemLoader):
     geraetegruppe_in = MapCompose()
     dfg_verfahren_out = TakeFirst()
     fachrichtungen_in = MapCompose(split_comma_space)
-    # TODO: there seem to be some fachliche_zuordnungen that have multiple entries: https://gepris.dfg.de/gepris/projekt/431572311
-    fachliche_zuordnungen_out = TakeFirst()
     webseite_in = MapCompose(get_reference_path)
     webseite_out = TakeFirst()
     foerderung_beginn_in = MapCompose(int)
